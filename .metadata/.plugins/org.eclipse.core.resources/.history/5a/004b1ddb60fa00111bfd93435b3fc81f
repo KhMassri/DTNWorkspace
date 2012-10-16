@@ -1,0 +1,74 @@
+Scenario.name = %%Group4.router%%BS%%Group4.bufferSize%%TS%%btInterface.transmitSpeed%%
+Scenario.endTime = 341042.00
+Scenario.updateInterval = 1
+Scenario.simulateConnections = false
+Scenario.nrofHostGroups = 4
+
+Optimization.endOfEventProcessing = 341042.00
+Scenario.useRealNode = 0
+
+
+Group.router = [Prophet;DirectDelivery;Scar;SprayAndWait;Epidemic;Prophet;Fad;MaxProp;Rapid;FuzzySpray]
+
+Group4.router = [Prophet;DirectDelivery;Scar;SprayAndWait;Epidemic;Prophet;Fad;MaxProp;Rapid;FuzzySpray]
+
+Group4.bufferSize = 101k
+#Group4.bufferSize = [50k;100k;150k;300k]
+Events1.interval = 100,101
+#Events1.interval = [100,101;300,301;400,401;500,501]
+Events1.size = 10k,10.001k
+btInterface.transmitSpeed = 256k
+
+
+
+MovementModel.rngSeed = [1]
+
+Group1.groupID = Gen
+Group1.router = GeneratorRouter
+Group1.movementModel = StationaryMovement 
+Group1.mode = 0
+Group1.direction = 90
+Group1.offset = 10
+Group1.nodeLocation = 850,250
+Group1.nrofHosts = [1]
+Group1.bufferSize = 1000M
+Group1.msgTtl = 120000
+
+Group2.groupID = Sink
+#Group2.router = SinkRouter
+Group2.movementModel = StationaryMovement 
+Group2.mode = 1
+Group2.lowLeft = 700,100
+Group2.topRight = 800, 200
+Group2.nrofHosts = [1]
+Group2.bufferSize = 1000M
+Group2.msgTtl = 120000
+
+
+Group3.groupID = Dummy
+Group3.movementModel = StationaryMovement 
+Group3.mode = 1
+Group3.lowLeft = 500,100
+Group3.topRight = 600, 200
+Group3.nrofHosts = [19]
+
+Group4.groupID = Relay
+Group4.movementModel = StationaryMovement 
+Group4.mode = 1
+Group4.lowLeft = 10,10
+Group4.topRight = 400, 400
+Group4.msgTtl = 6000
+Group4.nrofHosts = [78]
+
+
+Events.nrof = 2
+Events2.class = StandardEventsReader
+Events2.filePath = data/infocomS2_13_DF-2.txt
+
+
+Events1.hosts = [0,1]
+Events1.tohosts = [1,2]
+
+
+Report.reportDir = reports/Infocom06
+

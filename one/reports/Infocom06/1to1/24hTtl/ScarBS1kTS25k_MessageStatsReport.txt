@@ -1,0 +1,23 @@
+Message stats for scenario ScarBS1kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 9663
+relayed: 9622
+aborted: 41
+dropped: 3023
+removed: 8009
+delivered: 773
+delivery_prob: 0.3090
+response_prob: 0.0000
+overhead_ratio: 11.4476
+latency_avg: 21070.4981
+latency_med: 12639.0000
+hopcount_avg: 3.6326
+hopcount_med: 3
+copies_avg: 1.9084732214228617
+total_copies_avg: 2.1678657074340526
+buffertime_avg: 14318.2775
+buffertime_med: 499.0000
+custodiantime_avg: 67881.0645
+rtt_avg: NaN
+rtt_med: NaN

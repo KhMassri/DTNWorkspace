@@ -1,0 +1,9 @@
+.depend
+.cproject
+.project
+.settings
+openbeacon-tracker
+filter-singularsighting
+src/custom-encryption-keys.h
+callgrind.out.*
+*.o

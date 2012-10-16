@@ -1,0 +1,23 @@
+Message stats for scenario MaxPropBS21kTS256k
+sim_time: 341042.0000
+created: 928
+started: 232717
+relayed: 231580
+aborted: 1137
+dropped: 138063
+removed: 95167
+delivered: 164
+delivery_prob: 0.1767
+response_prob: 0.0000
+overhead_ratio: 1411.0732
+latency_avg: 277.4756
+latency_med: 37.0000
+hopcount_avg: 4.4146
+hopcount_med: 4
+copies_avg: 50.48275862068966
+total_copies_avg: 250.3706896551724
+buffertime_avg: 401.8314
+buffertime_med: 0.0000
+custodiantime_avg: 100990.4580
+rtt_avg: NaN
+rtt_med: NaN

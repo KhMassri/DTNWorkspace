@@ -1,0 +1,101 @@
+Scenario.name = %%Group1.DecisionEngine%%G%%NCP.nrofGenerations%%K%%NCP.nrofInjections%%L%%NCP.nrofCopies%%
+Scenario.endTime = 341042.00
+Scenario.updateInterval = 1
+Scenario.simulateConnections = false
+Scenario.nrofHostGroups = 3
+
+Optimization.endOfEventProcessing = 341042.00
+
+Scenario.useRealNode = 0
+btInterface.transmitSpeed = 256k
+btInterface.transmitRange = 20
+
+
+Group.router = DecisionEngineRouter
+
+# the router is DecisionEngine but each decider is according to the specified in the Groupx.DecisionEngien
+DecisionEngineRouter.decisionEngine = [ENCSource]
+Group.DecisionEngine = LCNCPDecisionEngine
+
+
+Group1.DecisionEngine = [LCNCPSource]
+Group2.DecisionEngine = [LCNCPRelay]
+Group3.DecisionEngine = [LCNCPDestination]
+Group4.DecisionEngine = [LCNCPRelay]
+
+
+NCP.nrofPods = 1
+NCP.nrofGenerations = [10]
+NCP.nrofInjections = [20]
+NCP.nrofCopies = [2;4;8;16]
+
+#[2;4;8;12;16;24;32]
+#[10;12;14;16;20;27;32;36;40;60;80]
+
+# 7 with [7;9;11;13;15;17;19;25;30;35;40;50]
+# 10 with 10;12;14;16;18;20;25;30;35;40;45;50
+# 20 with 20;22;24;26;28;30;32;34;38;42;46;50
+# ENCP L 2;4;8;16;32 with G,K 7,9 10,12 20,23
+
+MovementModel.rngSeed = [1]
+
+#Group1.groupID = Destination
+#Group1.movementModel = StationaryMovement 
+#Group1.mode = 0
+#Group1.direction = 90
+#Group1.offset = 10
+#Group1.nodeLocation = 850,250
+#Group1.nrofHosts = [1]
+#Group1.bufferSize = 1000M
+#Group1.msgTtl = 12000
+
+Group1.groupID = Source
+Group1.movementModel = StationaryMovement 
+Group1.mode = 1
+Group1.lowLeft = 700,100
+Group1.topRight = 800, 200
+Group1.nrofHosts = [2]
+Group1.bufferSize = 100M
+Group1.msgTtl = 12000
+
+
+Group2.groupID = Dummy
+Group2.movementModel = StationaryMovement 
+Group2.mode = 1
+Group2.lowLeft = 500,100
+Group2.topRight = 600, 200
+Group2.nrofHosts = [19]
+
+
+#Group3.groupID = Dest
+#Group3.movementModel = StationaryMovement 
+#Group3.mode = 0
+#Group3.direction = 90
+#Group3.offset = 10
+#Group3.nodeLocation = 850,250
+#Group3.nrofHosts = [1]
+#Group3.bufferSize = 1000M
+#Group3.msgTtl = 12000
+
+
+Group3.groupID = Relay
+Group3.movementModel = StationaryMovement 
+Group3.mode = 1
+Group3.lowLeft = 10,10
+Group3.topRight = 400, 400
+Group3.msgTtl = 1200
+Group3.nrofHosts = [78]
+Group3.bufferSize = [200k]
+
+Events.nrof = 2
+Events2.class = StandardEventsReader
+Events2.filePath = data/connections/infocomS0_11_15_D1_2_13.txt
+
+
+Events1.hosts = [0,1]
+Events1.tohosts = [21,22]
+Events1.interval = 1,2
+Events1.size = 10k,11k
+
+Report.reportDir = reports/test
+

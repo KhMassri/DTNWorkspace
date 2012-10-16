@@ -1,0 +1,45 @@
+Scenario.name = reportOf%%Group3.router%%%%Group3.movementModel%%nrOfHosts%%Group3.nrofHosts%%bS%%Group3.bufferSize%%Seed%%MovementModel.rngSeed%%
+
+Scenario.endTime = 10000
+Scenario.updateInterval = 1
+Scenario.useRealNode = 1
+
+
+Group3.router = SprayAndWait
+#Group3.movementModel = StationaryMovement 
+#Group3.mode = 1
+#Group3.nodeLocation = 200, 0
+#Group3.offset = 20.00
+#Group3.direction = 90
+#Group3.lowLeft = 0,0
+#Group3.topRight = 400, 200
+
+Optimization.endOfEventProcessing = 100000
+Events.nrof = 2
+Scenario.simulateConnections = true
+Events1.interval = 10,11
+Events1.hosts = 0,10
+Events1.tohosts = 0,2
+
+# for CLA boundling
+#Report.nrofReports = 3
+#Report.report3 = DTN2Reporter
+#DTN2.configFile = data/DTN2/dtn2config.txt
+#Events2.class = DTN2Events
+
+CloneManager.dest_ip = 127.0.0.1
+CloneManager.dest_port = 8090
+CloneManager.host_addres = 0
+CloneManager.my_port = 8080
+CloneManager.init_state = 0
+CloneManager.switch_coord = 100
+
+
+
+Group3.movementModel = ExternalMovement
+ExternalMovement.file = data/testpath.txt
+Group3.nrofHosts = 10
+Group3.bufferSize = 100k
+MovementModel.rngSeed = 4
+Report.reportDir = reports/testReality
+

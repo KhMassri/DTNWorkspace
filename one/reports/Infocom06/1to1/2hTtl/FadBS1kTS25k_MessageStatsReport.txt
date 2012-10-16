@@ -1,0 +1,23 @@
+Message stats for scenario FadBS1kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 21151
+relayed: 20997
+aborted: 154
+dropped: 15770
+removed: 6994
+delivered: 730
+delivery_prob: 0.2918
+response_prob: 0.0000
+overhead_ratio: 27.7630
+latency_avg: 1978.6260
+latency_med: 1071.0000
+hopcount_avg: 2.9096
+hopcount_med: 3
+copies_avg: 3.9268585131894485
+total_copies_avg: 9.100319744204636
+buffertime_avg: 2096.5633
+buffertime_med: 546.0000
+custodiantime_avg: 19075.2062
+rtt_avg: NaN
+rtt_med: NaN

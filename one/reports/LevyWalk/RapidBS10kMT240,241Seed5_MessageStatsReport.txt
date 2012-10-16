@@ -1,0 +1,23 @@
+Message stats for scenario RapidBS10kMT240,241Seed5
+sim_time: 341042.1000
+created: 1251
+started: 191034
+relayed: 191034
+aborted: 0
+dropped: 157108
+removed: 29391
+delivered: 649
+delivery_prob: 0.5188
+response_prob: 0.0000
+overhead_ratio: 293.3513
+latency_avg: 59698.9488
+latency_med: 54324.2000
+hopcount_avg: 9.5331
+hopcount_med: 7
+copies_avg: 105.24380495603518
+total_copies_avg: 153.18625099920064
+buffertime_avg: 6165.6916
+buffertime_med: 819.8000
+custodiantime_avg: 925841.6388
+rtt_avg: NaN
+rtt_med: NaN

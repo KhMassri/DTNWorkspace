@@ -1,0 +1,23 @@
+Message stats for scenario FirstContactBS10kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 63346
+relayed: 63043
+aborted: 303
+dropped: 103
+removed: 63043
+delivered: 1705
+delivery_prob: 0.6815
+response_prob: 0.0000
+overhead_ratio: 35.9754
+latency_avg: 34803.7073
+latency_med: 23571.0000
+hopcount_avg: 24.7754
+hopcount_med: 18
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 1723.3818
+buffertime_med: 8.0000
+custodiantime_avg: 46387.3269
+rtt_avg: NaN
+rtt_med: NaN

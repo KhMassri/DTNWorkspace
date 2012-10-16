@@ -1,0 +1,10 @@
+Scenario.name = reportOf%%Group3.router%%%%Group3.movementModel%%nrOfHosts%%Group3.nrofHosts%%bS%%Group3.bufferSize%%Seed%%MovementModel.rngSeed%%
+
+Group3.router = MaxProp
+Group3.movementModel = [LevyWalk]
+Group3.nrofHosts = 70
+Group3.bufferSize = 10k 
+MovementModel.rngSeed = 1
+
+
+Report.reportDir = reports/test

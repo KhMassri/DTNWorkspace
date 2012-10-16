@@ -1,0 +1,23 @@
+Message stats for scenario DirectDeliveryBS101kTS256k
+sim_time: 341042.0000
+created: 928
+started: 529
+relayed: 527
+aborted: 2
+dropped: 388
+removed: 1455
+delivered: 527
+delivery_prob: 0.5679
+response_prob: 0.0000
+overhead_ratio: 0.0000
+latency_avg: 22752.9583
+latency_med: 7028.0000
+hopcount_avg: 2.0000
+hopcount_med: 2
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 59592.5616
+buffertime_med: 51235.0000
+custodiantime_avg: 118350.3136
+rtt_avg: NaN
+rtt_med: NaN

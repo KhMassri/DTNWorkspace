@@ -1,0 +1,23 @@
+Message stats for scenario MaxPropBS10kMT360,361
+sim_time: 341042.0000
+created: 834
+started: 855467
+relayed: 851207
+aborted: 4260
+dropped: 69244
+removed: 777677
+delivered: 705
+delivery_prob: 0.8453
+response_prob: 0.0000
+overhead_ratio: 1206.3858
+latency_avg: 17112.0993
+latency_med: 8684.0000
+hopcount_avg: 4.7489
+hopcount_med: 4
+copies_avg: 108.121103117506
+total_copies_avg: 1020.7865707434053
+buffertime_avg: 541.6625
+buffertime_med: 1.0000
+custodiantime_avg: 605204.9974
+rtt_avg: NaN
+rtt_med: NaN

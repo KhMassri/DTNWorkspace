@@ -1,0 +1,23 @@
+Message stats for scenario RapidBS50kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 1560434
+relayed: 1554988
+aborted: 5446
+dropped: 0
+removed: 1543867
+delivered: 2153
+delivery_prob: 0.8605
+response_prob: 0.0000
+overhead_ratio: 721.2425
+latency_avg: 17583.1105
+latency_med: 9601.0000
+hopcount_avg: 4.3888
+hopcount_med: 4
+copies_avg: 30.904076738609113
+total_copies_avg: 621.6374900079936
+buffertime_avg: 681.4583
+buffertime_med: 31.0000
+custodiantime_avg: 488658.1082
+rtt_avg: NaN
+rtt_med: NaN

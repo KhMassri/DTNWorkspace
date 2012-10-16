@@ -1,0 +1,3 @@
+#!/bin/bash
+
+make MODE=pro CHIP=16F684 MAIN=main-ISI-original.c clean counted

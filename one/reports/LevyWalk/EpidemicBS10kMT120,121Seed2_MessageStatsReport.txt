@@ -1,0 +1,23 @@
+Message stats for scenario EpidemicBS10kMT120,121Seed2
+sim_time: 341042.1000
+created: 2501
+started: 254716
+relayed: 254716
+aborted: 0
+dropped: 175078
+removed: 76419
+delivered: 508
+delivery_prob: 0.2031
+response_prob: 0.0000
+overhead_ratio: 500.4094
+latency_avg: 68485.4658
+latency_med: 43220.0000
+hopcount_avg: 8.2461
+hopcount_med: 5
+copies_avg: 34.480207916833265
+total_copies_avg: 102.64254298280687
+buffertime_avg: 5923.1974
+buffertime_med: 1372.2000
+custodiantime_avg: 595628.3025
+rtt_avg: NaN
+rtt_med: NaN

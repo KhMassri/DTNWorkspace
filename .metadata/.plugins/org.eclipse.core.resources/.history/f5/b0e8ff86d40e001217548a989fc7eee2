@@ -1,0 +1,11 @@
+Scenario.name = %%Group1.router%%BS%%Group1.bufferSize%%MT%%Events1.interval%%Seed%%MovementModel.rngSeed%%
+
+Group1.router = [DirectDelivery]
+Group1.nrofHosts = 78
+Group1.bufferSize = [10k;100k] 
+Events1.interval = [341000,341040;120,121;240,241;240,241;360,361;360,361;600,601;600,601]
+
+MovementModel.rngSeed = [11;1;1;1;1;1;1;1;2;2;2;2;2;2;2;2;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5]
+
+Report.reportDir = reports/testLevyWalk
+

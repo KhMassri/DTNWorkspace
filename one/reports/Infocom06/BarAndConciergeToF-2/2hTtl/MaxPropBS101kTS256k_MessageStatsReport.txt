@@ -1,0 +1,23 @@
+Message stats for scenario MaxPropBS101kTS256k
+sim_time: 341042.0000
+created: 928
+started: 199188
+relayed: 198180
+aborted: 1008
+dropped: 46587
+removed: 153223
+delivered: 188
+delivery_prob: 0.2026
+response_prob: 0.0000
+overhead_ratio: 1053.1489
+latency_avg: 254.1011
+latency_med: 24.0000
+hopcount_avg: 4.9681
+hopcount_med: 5
+copies_avg: 14.639008620689655
+total_copies_avg: 214.35344827586206
+buffertime_avg: 501.8471
+buffertime_med: 2.0000
+custodiantime_avg: 108053.9612
+rtt_avg: NaN
+rtt_med: NaN

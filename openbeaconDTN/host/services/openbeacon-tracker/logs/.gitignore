@@ -1,0 +1,8 @@
+*.bin
+*.bin.bz2
+*.pdf
+*.log
+*.json
+*.json.*
+*.pcap
+raw/raw-packets_*

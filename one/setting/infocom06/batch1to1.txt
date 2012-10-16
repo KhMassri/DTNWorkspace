@@ -1,0 +1,50 @@
+Scenario.name = C%%Group2.router%%BS%%Group2.bufferSize%%MT%%Events1.interval%%
+Scenario.endTime = 341042.00
+Scenario.updateInterval = 1
+Scenario.simulateConnections = false
+Scenario.nrofHostGroups = 2
+
+Optimization.endOfEventProcessing = 341042.00
+Scenario.useRealNode = 0
+
+
+Group.router = [Clustered;FirstContact;FuzzySpray;DirectDelivery;Scar;Epidemic;Prophet;MaxProp;Rapid]
+
+Group2.router = [Clustered;FirstContact;FuzzySpray;DirectDelivery;Scar;Epidemic;Prophet;MaxProp;Rapid]
+
+Group2.bufferSize = [10k;100k]
+Events1.interval = 120,121
+Events1.size = 100,200
+btInterface.transmitSpeed = 25k
+
+
+
+MovementModel.rngSeed = [1]
+
+Group1.groupID = Dummy
+Group1.movementModel = StationaryMovement 
+Group1.mode = 1
+Group1.lowLeft = 500,100
+Group1.topRight = 600, 200
+Group1.nrofHosts = [21]
+
+Group2.groupID = Relay
+Group2.msgTtl = 120000
+Group2.movementModel = StationaryMovement 
+Group2.mode = 1
+Group2.lowLeft = 10,10
+Group2.topRight = 400, 400
+Group2.nrofHosts = [78]
+
+
+Events.nrof = 2
+Events2.class = StandardEventsReader
+Events2.filePath = data/infocomS21_98_D_21_98.txt
+
+
+Events1.hosts = [21,99]
+Events1.tohosts = [21,99]
+
+
+Report.reportDir = reports/Infocom06/1to1/test
+

@@ -1,0 +1,23 @@
+Message stats for scenario FadBS10kMT360,361Seed5
+sim_time: 341042.1000
+created: 834
+started: 10118
+relayed: 10118
+aborted: 0
+dropped: 3929
+removed: 1735
+delivered: 466
+delivery_prob: 0.5588
+response_prob: 0.0000
+overhead_ratio: 20.7124
+latency_avg: 120095.1195
+latency_med: 109476.8000
+hopcount_avg: 2.7017
+hopcount_med: 2
+copies_avg: 7.273381294964029
+total_copies_avg: 12.573141486810552
+buffertime_avg: 45680.7454
+buffertime_med: 25386.8000
+custodiantime_avg: 395016.4001
+rtt_avg: NaN
+rtt_med: NaN

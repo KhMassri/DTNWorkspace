@@ -1,0 +1,23 @@
+Message stats for scenario RapidBS100kMT360,361Seed3
+sim_time: 341042.1000
+created: 834
+started: 92164
+relayed: 92164
+aborted: 0
+dropped: 0
+removed: 82924
+delivered: 713
+delivery_prob: 0.8549
+response_prob: 0.0000
+overhead_ratio: 128.2623
+latency_avg: 65903.6627
+latency_med: 60911.0000
+hopcount_avg: 4.2076
+hopcount_med: 4
+copies_avg: 30.17386091127098
+total_copies_avg: 110.65347721822542
+buffertime_avg: 19531.5573
+buffertime_med: 0.1000
+custodiantime_avg: 2271577.6349
+rtt_avg: NaN
+rtt_med: NaN

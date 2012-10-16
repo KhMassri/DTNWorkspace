@@ -1,0 +1,32 @@
+Scenario.name = reportOf%%Group3.router%%%%Group3.movementModel%%nrOfHosts%%Group3.nrofHosts%%bS%%Group3.bufferSize%%Seed%%MovementModel.rngSeed%%
+Scenario.endTime = 1000000
+Scenario.updateInterval = 0.1
+Scenario.useRealNode = 1
+Scenario.simulateConnections = true
+btInterface.transmitRange = 30
+
+
+Group3.router = DecisionEngineRouter
+DecisionEngineRouter.decisionEngine = BridgingDecisionEngine
+Group3.movementModel = RandomWalk
+Group3.nrofHosts = 10
+Group3.bufferSize = 100k
+
+
+Optimization.endOfEventProcessing = 10000000
+
+Events.nrof = 2
+Events1.interval = 1000,10000
+Events1.hosts = 8,9
+Events1.tohosts = 9,10
+
+RealNodesManager.wsn1IP = 192.168.1.150
+RealNodesManager.wsn2IP = 192.168.1.150
+RealNodesManager.wsn1Port = 2000
+RealNodesManager.wsn2Port = 2001
+
+RealNodesManager.host_addres = 0
+
+MovementModel.rngSeed = 4
+Report.reportDir = reports/testReality
+

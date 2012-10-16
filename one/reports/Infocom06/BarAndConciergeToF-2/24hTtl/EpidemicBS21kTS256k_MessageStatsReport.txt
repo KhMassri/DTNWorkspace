@@ -1,0 +1,23 @@
+Message stats for scenario EpidemicBS21kTS256k
+sim_time: 341042.0000
+created: 928
+started: 1086201
+relayed: 1082126
+aborted: 4075
+dropped: 680640
+removed: 402778
+delivered: 195
+delivery_prob: 0.2101
+response_prob: 0.0000
+overhead_ratio: 5548.3641
+latency_avg: 1920.4615
+latency_med: 39.0000
+hopcount_avg: 15.7436
+hopcount_med: 4
+copies_avg: 134.29418103448276
+total_copies_avg: 1166.873922413793
+buffertime_avg: 122.3695
+buffertime_med: 1.0000
+custodiantime_avg: 142863.4989
+rtt_avg: NaN
+rtt_med: NaN

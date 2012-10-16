@@ -1,0 +1,23 @@
+Message stats for scenario RapidBS51kTS256k
+sim_time: 341042.0000
+created: 928
+started: 1245165
+relayed: 1240709
+aborted: 4456
+dropped: 697246
+removed: 544742
+delivered: 470
+delivery_prob: 0.5065
+response_prob: 0.0000
+overhead_ratio: 2638.8064
+latency_avg: 4623.0000
+latency_med: 344.0000
+hopcount_avg: 17.3532
+hopcount_med: 4
+copies_avg: 229.72952586206895
+total_copies_avg: 1337.4644396551723
+buffertime_avg: 106.3281
+buffertime_med: 7.0000
+custodiantime_avg: 142304.0744
+rtt_avg: NaN
+rtt_med: NaN

@@ -1,0 +1,23 @@
+Message stats for scenario FadBS501kTS256k
+sim_time: 341042.0000
+created: 928
+started: 12367
+relayed: 12275
+aborted: 92
+dropped: 2451
+removed: 10856
+delivered: 751
+delivery_prob: 0.8093
+response_prob: 0.0000
+overhead_ratio: 15.3449
+latency_avg: 3886.4874
+latency_med: 387.0000
+hopcount_avg: 3.8975
+hopcount_med: 4
+copies_avg: 4.164870689655173
+total_copies_avg: 13.418103448275861
+buffertime_avg: 18582.9723
+buffertime_med: 1388.0000
+custodiantime_avg: 266469.4106
+rtt_avg: NaN
+rtt_med: NaN

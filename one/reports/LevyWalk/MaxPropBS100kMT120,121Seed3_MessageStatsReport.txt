@@ -1,0 +1,23 @@
+Message stats for scenario MaxPropBS100kMT120,121Seed3
+sim_time: 341042.1000
+created: 2501
+started: 557418
+relayed: 557418
+aborted: 0
+dropped: 0
+removed: 529372
+delivered: 2341
+delivery_prob: 0.9360
+response_prob: 0.0000
+overhead_ratio: 237.1111
+latency_avg: 52284.1745
+latency_med: 49504.0000
+hopcount_avg: 4.8120
+hopcount_med: 4
+copies_avg: 36.93722510995602
+total_copies_avg: 222.94202319072372
+buffertime_avg: 12432.5034
+buffertime_med: 0.1000
+custodiantime_avg: 2811370.8557
+rtt_avg: NaN
+rtt_med: NaN

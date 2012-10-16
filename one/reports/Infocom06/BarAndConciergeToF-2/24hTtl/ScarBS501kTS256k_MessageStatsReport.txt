@@ -1,0 +1,23 @@
+Message stats for scenario ScarBS501kTS256k
+sim_time: 341042.0000
+created: 928
+started: 7416
+relayed: 7379
+aborted: 37
+dropped: 214
+removed: 8265
+delivered: 756
+delivery_prob: 0.8147
+response_prob: 0.0000
+overhead_ratio: 8.7606
+latency_avg: 3947.4431
+latency_med: 385.0000
+hopcount_avg: 4.0265
+hopcount_med: 4
+copies_avg: 2.4331896551724137
+total_copies_avg: 3.6077586206896552
+buffertime_avg: 11858.9009
+buffertime_med: 99.0000
+custodiantime_avg: 108353.0399
+rtt_avg: NaN
+rtt_med: NaN

@@ -1,0 +1,23 @@
+Message stats for scenario FirstContactBS21kTS256k
+sim_time: 341042.0000
+created: 928
+started: 8826
+relayed: 8733
+aborted: 93
+dropped: 328
+removed: 9661
+delivered: 590
+delivery_prob: 0.6358
+response_prob: 0.0000
+overhead_ratio: 13.8017
+latency_avg: 4315.2254
+latency_med: 254.0000
+hopcount_avg: 10.4305
+hopcount_med: 8
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 9491.4252
+buffertime_med: 2.0000
+custodiantime_avg: 102165.7823
+rtt_avg: NaN
+rtt_med: NaN

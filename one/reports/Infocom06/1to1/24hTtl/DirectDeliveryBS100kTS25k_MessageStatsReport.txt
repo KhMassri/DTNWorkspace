@@ -1,0 +1,23 @@
+Message stats for scenario DirectDeliveryBS100kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 1273
+relayed: 1271
+aborted: 2
+dropped: 933
+removed: 1270
+delivered: 1271
+delivery_prob: 0.5080
+response_prob: 0.0000
+overhead_ratio: 0.0000
+latency_avg: 30485.9237
+latency_med: 26903.0000
+hopcount_avg: 1.0000
+hopcount_med: 1
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 54144.8747
+buffertime_med: 62646.0000
+custodiantime_avg: 54144.8747
+rtt_avg: NaN
+rtt_med: NaN

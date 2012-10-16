@@ -1,0 +1,23 @@
+Message stats for scenario ProphetBS50kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 2958886
+relayed: 2952281
+aborted: 6605
+dropped: 2242233
+removed: 686126
+delivered: 1439
+delivery_prob: 0.5751
+response_prob: 0.0000
+overhead_ratio: 2050.6199
+latency_avg: 22129.2571
+latency_med: 12092.0000
+hopcount_avg: 3.9486
+hopcount_med: 3
+copies_avg: 19.57154276578737
+total_copies_avg: 1180.3932853717026
+buffertime_avg: 2074.7294
+buffertime_med: 468.0000
+custodiantime_avg: 2600835.8647
+rtt_avg: NaN
+rtt_med: NaN

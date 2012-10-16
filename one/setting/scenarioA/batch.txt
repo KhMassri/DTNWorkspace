@@ -1,0 +1,11 @@
+Scenario.name = reportOf%%Group2.router%%%%Group2.movementModel%%nrOfHosts%%Group2.nrofHosts%%bS%%Group2.bufferSize%%Seed%%MovementModel.rngSeed%%
+
+Group2.router = MaxPropTest
+Group2.movementModel = [RandomWaypoint;RandomWalk;LevyWalk]
+Group2.nrofHosts = [10;10;10;20;20;20;40;40;40;70;70;70]
+Group2.bufferSize = [10k;10k;10k;10k;10k;10k;10k;10k;10k;10k;10k;10k;50k;50k;50k;50k;50k;50k;50k;50k;50k;50k;50k;50k;100k;100k;100k;100k;100k;100k;100k;100k;100k;100k;100k;100k]
+MovementModel.rngSeed = [1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5]
+
+
+Report.reportDir = reports/0207
+

@@ -1,0 +1,23 @@
+Message stats for scenario FirstContactBS100kMT360,361
+sim_time: 341042.0000
+created: 834
+started: 22564
+relayed: 22458
+aborted: 106
+dropped: 0
+removed: 22458
+delivered: 562
+delivery_prob: 0.6739
+response_prob: 0.0000
+overhead_ratio: 38.9609
+latency_avg: 41334.0961
+latency_med: 27213.0000
+hopcount_avg: 25.8719
+hopcount_med: 21
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 1825.0466
+buffertime_med: 5.0000
+custodiantime_avg: 52886.3174
+rtt_avg: NaN
+rtt_med: NaN

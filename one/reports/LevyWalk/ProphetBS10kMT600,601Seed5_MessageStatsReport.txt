@@ -1,0 +1,23 @@
+Message stats for scenario ProphetBS10kMT600,601Seed5
+sim_time: 341042.1000
+created: 501
+started: 802626
+relayed: 802626
+aborted: 0
+dropped: 482285
+removed: 315405
+delivered: 291
+delivery_prob: 0.5808
+response_prob: 0.0000
+overhead_ratio: 2757.1649
+latency_avg: 88797.7419
+latency_med: 81620.6000
+hopcount_avg: 4.6014
+hopcount_med: 4
+copies_avg: 226.84231536926148
+total_copies_avg: 1602.4670658682635
+buffertime_avg: 1291.0488
+buffertime_med: 6.5000
+custodiantime_avg: 2067985.3120
+rtt_avg: NaN
+rtt_med: NaN

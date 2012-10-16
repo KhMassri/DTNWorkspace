@@ -1,0 +1,112 @@
+CROSS=arm-none-eabi-
+CC=$(CROSS)gcc
+LD=$(CROSS)ld
+OBJCOPY=$(CROSS)objcopy
+OBJDUMP=$(CROSS)objdump
+AR=$(CROSS)ar
+LDSCRIPT=$(CORE)linker/$(CPU).ld
+
+# determine program version
+PROGRAM_VERSION:=$(shell git describe --tags --abbrev=4 --dirty 2>/dev/null | sed s/^v//)
+ifeq ("$(PROGRAM_VERSION)","")
+    PROGRAM_VERSION:='unknown'
+endif
+
+CORE=../core/
+
+#
+# CFLAGS common to both the THUMB and ARM mode builds
+#
+CFLAGS= \
+-D __$(CPU)__ \
+-D __$(ARCH)xx__ \
+-D PROGRAM_VERSION=\"$(PROGRAM_VERSION)\" \
+-D PROGRAM_NAME=\"$(TARGET)\" \
+-Iconfig \
+-I$(CORE)cmsis/inc \
+-I$(CORE)openbeacon/inc \
+-I$(CORE)peripherals/inc \
+-I$(CORE)peripherals/inc/usb \
+-I$(CORE)freertos/inc \
+-Wall \
+-Werror \
+-Wextra  \
+-Wno-multichar \
+-Wstrict-prototypes  \
+-Wno-strict-aliasing  \
+-D CORTEXM3_GCC  \
+-mcpu=cortex-m3 \
+-msoft-float \
+-mthumb \
+-fno-common \
+-T$(LDSCRIPT) \
+$(DEBUG)  \
+$(OPTIM) \
+-fomit-frame-pointer \
+-ffunction-sections \
+-fdata-sections \
+$(APP_CFLAGS)
+
+LINKER_FLAGS=$(APP_LDFLAGS) -Xlinker --gc-sections -Xlinker -o$(TARGET).elf -Xlinker -M -Xlinker -Map=$(TARGET).map
+
+ARM_SRC= \
+  $(APP_SRC) \
+  $(CORE)cmsis/src/core_cm3.c \
+  $(CORE)cmsis/src/system_$(ARCH)xx.c \
+  $(CORE)startup/$(ARCH)xx.c \
+  $(CORE)peripherals/src/uart.c \
+  $(CORE)peripherals/src/gpio.c \
+  $(CORE)peripherals/src/usb/cdcusbdesc.c \
+  $(CORE)peripherals/src/usb/cdcuser.c \
+  $(CORE)peripherals/src/usb/usbcore.c \
+  $(CORE)peripherals/src/usb/usbhw.c \
+  $(CORE)peripherals/src/usb/usbuser.c \
+  $(CORE)freertos/src/heap_2.c \
+  $(CORE)freertos/src/list.c \
+  $(CORE)freertos/src/port.c \
+  $(CORE)freertos/src/queue.c \
+  $(CORE)freertos/src/tasks.c \
+  $(CORE)openbeacon/src/msd.c \
+  $(CORE)openbeacon/src/vfs.c \
+  $(CORE)openbeacon/src/hid.c \
+  $(CORE)openbeacon/src/spi.c \
+  $(CORE)openbeacon/src/iap.c \
+  $(CORE)openbeacon/src/crc8.c \
+  $(CORE)openbeacon/src/crc16.c \
+  $(CORE)openbeacon/src/xxtea.c \
+  $(CORE)openbeacon/src/rfid.c \
+  $(CORE)openbeacon/src/persistent.c \
+  $(CORE)openbeacon/src/debug_printf.c
+
+#
+# Define all object files.
+#
+ARM_OBJ = $(ARM_SRC:.c=.o)
+APP_ADDITIONAL?=
+
+$(TARGET).bin : $(TARGET).elf
+	$(OBJCOPY) $(TARGET).elf -O binary $(TARGET).bin
+
+$(TARGET).hex : $(TARGET).elf
+	$(OBJCOPY) $(TARGET).elf -O ihex $(TARGET).hex
+
+$(TARGET).elf : $(ARM_OBJ) $(CRT0) $(BOOTLOADER) $(APP_ADDITIONAL) Makefile
+	$(CC) $(CFLAGS) $(ARM_OBJ) $(BOOTLOADER) $(APP_ADDITIONAL) -nostartfiles $(CRT0) $(LINKER_FLAGS)
+	$(OBJDUMP) -d $(TARGET).elf > $(TARGET).asm
+
+$(ARM_OBJ) : %.o : %.c $(LDSCRIPT) Makefile
+	$(CC) -c $(CFLAGS) $< -o $@
+
+version:
+	@echo "$(TARGET) version $(PROGRAM_VERSION)"
+
+flash : $(TARGET).bin
+	lpc-flash $(TARGET).bin /media/CRP\ DISABLD/firmware.bin
+
+upload_firmware : $(TARGET).bin
+	lpc-flash $(TARGET).bin $(TARGET)-$(CPU).bin
+	scp $(TARGET)-$(CPU).bin bitmanufaktur.net:/home/wwwrun/open.bitmanufaktur.com/web/www/people/milosch/firmware/lpc13xx/
+
+clean : app_clean
+	find $(CORE) -name '*.o' -exec rm \{\} \;
+	rm -f $(TARGET).bin $(TARGET).elf $(TARGET).map $(TARGET).asm $(TARGET)-$(CPU).bin

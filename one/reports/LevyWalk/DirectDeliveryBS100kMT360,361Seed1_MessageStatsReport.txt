@@ -1,0 +1,23 @@
+Message stats for scenario DirectDeliveryBS100kMT360,361Seed1
+sim_time: 341042.1000
+created: 834
+started: 210
+relayed: 210
+aborted: 0
+dropped: 0
+removed: 210
+delivered: 210
+delivery_prob: 0.2518
+response_prob: 0.0000
+overhead_ratio: 0.0000
+latency_avg: 93075.8395
+latency_med: 71755.6000
+hopcount_avg: 1.0000
+hopcount_med: 1
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 93075.8414
+buffertime_med: 71755.6000
+custodiantime_avg: 93075.8414
+rtt_avg: NaN
+rtt_med: NaN

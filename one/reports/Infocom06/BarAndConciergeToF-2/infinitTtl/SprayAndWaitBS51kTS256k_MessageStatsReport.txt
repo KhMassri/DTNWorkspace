@@ -1,0 +1,23 @@
+Message stats for scenario SprayAndWaitBS51kTS256k
+sim_time: 341042.0000
+created: 928
+started: 3264
+relayed: 3206
+aborted: 58
+dropped: 1522
+removed: 2684
+delivered: 775
+delivery_prob: 0.8351
+response_prob: 0.0000
+overhead_ratio: 3.1368
+latency_avg: 12196.2116
+latency_med: 1360.0000
+hopcount_avg: 3.0981
+hopcount_med: 3
+copies_avg: 3.4827586206896552
+total_copies_avg: 3.6196120689655173
+buffertime_avg: 31649.1664
+buffertime_med: 8615.0000
+custodiantime_avg: 143444.3901
+rtt_avg: NaN
+rtt_med: NaN

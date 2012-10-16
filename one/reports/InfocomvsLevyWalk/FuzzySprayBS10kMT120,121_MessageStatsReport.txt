@@ -1,0 +1,23 @@
+Message stats for scenario FuzzySprayBS10kMT120,121
+sim_time: 341042.0000
+created: 2501
+started: 3917543
+relayed: 3910608
+aborted: 6935
+dropped: 3690926
+removed: 215569
+delivered: 1499
+delivery_prob: 0.5994
+response_prob: 0.0000
+overhead_ratio: 2607.8112
+latency_avg: 22442.2882
+latency_med: 13134.0000
+hopcount_avg: 3.1694
+hopcount_med: 3
+copies_avg: 390.9408236705318
+total_copies_avg: 1564.018392642943
+buffertime_avg: 346.4977
+buffertime_med: 0.0000
+custodiantime_avg: 584957.3742
+rtt_avg: NaN
+rtt_med: NaN

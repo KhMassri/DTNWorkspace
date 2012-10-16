@@ -1,0 +1,23 @@
+Message stats for scenario MaxPropBS1kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 2217383
+relayed: 2211617
+aborted: 5766
+dropped: 2145079
+removed: 68024
+delivered: 744
+delivery_prob: 0.2974
+response_prob: 0.0000
+overhead_ratio: 2971.6035
+latency_avg: 2004.0309
+latency_med: 1283.0000
+hopcount_avg: 3.8293
+hopcount_med: 4
+copies_avg: 712.750199840128
+total_copies_avg: 884.6422861710631
+buffertime_avg: 34.3797
+buffertime_med: 0.0000
+custodiantime_avg: 30410.0408
+rtt_avg: NaN
+rtt_med: NaN

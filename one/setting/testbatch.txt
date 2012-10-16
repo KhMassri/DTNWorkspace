@@ -1,0 +1,36 @@
+Scenario.name = %%DecisionEngineRouter.decisionEngine%%%%Group3.movementModel%%nrOfHosts%%Group3.nrofHosts%%bS%%Group3.bufferSize%%Seed%%MovementModel.rngSeed%%
+
+Scenario.endTime = 25008829.00
+Scenario.updateInterval = 1
+Group3.router = DecisionEngineRouter
+DecisionEngineRouter.decisionEngine = [SimAnnDecisionEngine;SnFDecisionEngine;SnWDecisionEngine]
+
+SimAnn.alpha = 1
+SnF.nrofCopies = 4
+SnW.nrofCopies = 4
+
+#Group3.router = SimulatedAnnealing
+Group3.movementModel = StationaryMovement 
+Group3.mode = 1
+Group3.nodeLocation = 200, 0
+Group3.offset = 20.00
+Group3.direction = 90
+Group3.lowLeft = 0,0
+Group3.topRight = 400, 200
+
+Optimization.endOfEventProcessing = 25008829.00
+Events.nrof = 2
+Scenario.simulateConnections = false
+Events2.class = StandardEventsReader
+Events2.filePath = data/connections/MITReality2004_5.txt
+Events1.interval = 3600,7200
+
+
+#Group3.movementModel = ExternalMovement
+#ExternalMovement.file = data/testpath.txt
+Group3.nrofHosts = 100
+Group3.bufferSize = 10k
+Group3.msgTtl = 3000000
+MovementModel.rngSeed = 5
+Report.reportDir = reports/testReality
+

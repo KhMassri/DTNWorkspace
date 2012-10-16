@@ -1,0 +1,23 @@
+Message stats for scenario ProphetBS100kMT360,361
+sim_time: 341042.0000
+created: 834
+started: 2336435
+relayed: 2330495
+aborted: 5940
+dropped: 131701
+removed: 2152008
+delivered: 705
+delivery_prob: 0.8453
+response_prob: 0.0000
+overhead_ratio: 3304.6667
+latency_avg: 18948.7348
+latency_med: 10129.0000
+hopcount_avg: 3.7574
+hopcount_med: 4
+copies_avg: 30.167865707434053
+total_copies_avg: 2794.513189448441
+buffertime_avg: 2388.5039
+buffertime_med: 6.0000
+custodiantime_avg: 7158330.4803
+rtt_avg: NaN
+rtt_med: NaN

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+
+echo -en 'Waiting for tag ...'
+while true; do
+
+	if lsusb -d 04cc:0003 >/dev/null; then
+		if [ -s /media/CRP\ DISABLD/firmware.bin ]; then
+			if make flash; then
+				echo -e '\nFirmware Flashing done ...'
+				echo -en '\npress [RESET] to continue ...'
+				while lsusb -d 04cc:0003 >/dev/null; do
+					echo -n '.'
+					sleep 1
+				done
+				echo '[DONE]'
+			else
+				echo "failed copying firmware."
+			fi
+		fi
+	fi
+
+	if lsusb -d 2366:0003 >/dev/null; then
+		ID=`ls /media/OPENBEACON/LOG-*.BIN 2>/dev/null| sed 's/^.*-\([0-9A-F]\+\)\.BIN/\1/g'`
+		if [ "$ID" != "" ]; then
+			echo -en "\nBluetooth scan for Tag ID=$ID ...\n"
+			BT=`hcitool scan | grep "OpenBeacon Tag $ID"`
+			if [ "$BT" != "" ]; then
+				echo -en "[DONE]\nRemove USB connector to continue ..."
+				while lsusb -d 2366:0003 >/dev/null; do
+					echo -n '.'
+					sleep 1
+				done
+
+				echo -en "[DONE]\n\nwaiting for tag $ID to appear ..."
+				while true; do
+					if grep \"id\":$ID /tmp/openbeacon.json; then
+						echo -en "[DONE]\n\n Waiting for next tag ..."
+						break
+					else
+						echo -n '.'
+						sleep 1
+					fi
+				done
+			fi
+		fi
+	fi
+
+	echo -n '.'
+	sleep 1
+done

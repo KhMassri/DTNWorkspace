@@ -1,0 +1,23 @@
+Message stats for scenario EpidemicBS50kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 1692469
+relayed: 1687249
+aborted: 5220
+dropped: 72369
+removed: 1615934
+delivered: 1010
+delivery_prob: 0.4037
+response_prob: 0.0000
+overhead_ratio: 1669.5436
+latency_avg: 1610.4683
+latency_med: 456.0000
+hopcount_avg: 4.8406
+hopcount_med: 4
+copies_avg: 18.382893685051958
+total_copies_avg: 674.9564348521183
+buffertime_avg: 241.0069
+buffertime_med: 1.0000
+custodiantime_avg: 162626.9660
+rtt_avg: NaN
+rtt_med: NaN

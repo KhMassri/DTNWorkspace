@@ -1,0 +1,23 @@
+Message stats for scenario ProphetBS101kTS256k
+sim_time: 341042.0000
+created: 928
+started: 1519539
+relayed: 1515442
+aborted: 4097
+dropped: 1135469
+removed: 380738
+delivered: 346
+delivery_prob: 0.3728
+response_prob: 0.0000
+overhead_ratio: 4378.8902
+latency_avg: 5699.7890
+latency_med: 352.0000
+hopcount_avg: 3.9191
+hopcount_med: 4
+copies_avg: 19.674568965517242
+total_copies_avg: 1633.646551724138
+buffertime_avg: 184.6496
+buffertime_med: 9.0000
+custodiantime_avg: 301688.6121
+rtt_avg: NaN
+rtt_med: NaN

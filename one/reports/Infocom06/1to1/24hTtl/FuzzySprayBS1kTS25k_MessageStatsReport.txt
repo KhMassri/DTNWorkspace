@@ -1,0 +1,23 @@
+Message stats for scenario FuzzySprayBS1kTS25k
+sim_time: 341042.0000
+created: 2502
+started: 3273614
+relayed: 3266880
+aborted: 6734
+dropped: 3254560
+removed: 13556
+delivered: 617
+delivery_prob: 0.2466
+response_prob: 0.0000
+overhead_ratio: 5293.7812
+latency_avg: 10947.0032
+latency_med: 2671.0000
+hopcount_avg: 4.0016
+hopcount_med: 3
+copies_avg: 588.4240607513989
+total_copies_avg: 1306.460831334932
+buffertime_avg: 44.0702
+buffertime_med: 0.0000
+custodiantime_avg: 58906.5505
+rtt_avg: NaN
+rtt_med: NaN

@@ -1,0 +1,23 @@
+Message stats for scenario DirectDeliveryBS10kMT240,241
+sim_time: 341042.0000
+created: 1251
+started: 756
+relayed: 756
+aborted: 0
+dropped: 0
+removed: 755
+delivered: 756
+delivery_prob: 0.6043
+response_prob: 0.0000
+overhead_ratio: 0.0000
+latency_avg: 47560.0040
+latency_med: 33078.0000
+hopcount_avg: 1.0000
+hopcount_med: 1
+copies_avg: 1.0
+total_copies_avg: 1.0
+buffertime_avg: 47587.4570
+buffertime_med: 33045.0000
+custodiantime_avg: 47587.4570
+rtt_avg: NaN
+rtt_med: NaN

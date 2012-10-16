@@ -1,0 +1,23 @@
+Message stats for scenario ScarBS10kMT120,121Seed4
+sim_time: 341042.1000
+created: 2501
+started: 10963
+relayed: 10963
+aborted: 0
+dropped: 1365
+removed: 7318
+delivered: 1060
+delivery_prob: 0.4238
+response_prob: 0.0000
+overhead_ratio: 9.3425
+latency_avg: 96546.6316
+latency_med: 83561.9000
+hopcount_avg: 2.3160
+hopcount_med: 2
+copies_avg: 3.0763694522191125
+total_copies_avg: 3.235905637744902
+buffertime_avg: 50551.2345
+buffertime_med: 31112.9000
+custodiantime_avg: 228256.0421
+rtt_avg: NaN
+rtt_med: NaN
