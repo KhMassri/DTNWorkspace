@@ -300,6 +300,7 @@ void
 nRFAPI_FlushTX (void)
 {
   nRFCMD_CmdExec (FLUSH_TX);
+
 }
 
 void
