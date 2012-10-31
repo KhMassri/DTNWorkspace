@@ -1,0 +1,26 @@
+
+public class M {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+	String id = "m2&m4";
+	String[] ids = id.split("&");
+	//System.out.print(ids.length);
+
+	
+	if(ids.length>1)
+		System.out.print(ids.toString());
+	else
+		System.out.print(id);
+
+
+
+}		
+
+
+
+
+}

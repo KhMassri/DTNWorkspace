@@ -244,7 +244,7 @@ public class RapidToSink extends DTNRouter {
 		DTNHost otherHost = con.getOtherNode(getHost());
 		
 		if(otherHost.isSink()){
-			delayTable.addAllAckedMessageIds(((SinkRouter)otherHost.getRouter()).getSinkedMessages());
+			delayTable.addAllAckedMessageIds(((SinkRouterOld)otherHost.getRouter()).getSinkedMessages());
 			return;
 		}
 		

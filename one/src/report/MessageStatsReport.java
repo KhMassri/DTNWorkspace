@@ -130,10 +130,17 @@ public class MessageStatsReport extends Report implements MessageListener {
 				
 		if(!delivered.contains(m.getId()))
 			if(from.getRouter().hasMessage(m.getId()))
-			copies.put(m.getId(), copies.get(m.getId())+1);
+				if(copies.containsKey(m.getId()))
+					copies.put(m.getId(), copies.get(m.getId())+1);
+				else
+					copies.put(m.getId(), 1);
+		
 		
 		if(from.getRouter().hasMessage(m.getId()) && m.getTo().getAddress()!=to.getAddress())
-			totalCopies.put(m.getId(), totalCopies.get(m.getId())+1);
+			if(totalCopies.containsKey(m.getId()))
+				totalCopies.put(m.getId(), totalCopies.get(m.getId())+1);
+			else
+				totalCopies.put(m.getId(),1);
 		
 	}
 

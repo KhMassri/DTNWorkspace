@@ -1,0 +1,23 @@
+Message stats for scenario &FtFadToFadSinkBS2kMT30,90
+sim_time: 341042.0000
+created: 5048
+started: 95399
+relayed: 94838
+aborted: 412
+dropped: 40778
+removed: 53793
+delivered: 3694
+delivery_prob: 0.7318
+response_prob: 0.0000
+overhead_ratio: 24.6735
+latency_avg: 11451.1760
+latency_med: 4131.0000
+hopcount_avg: 2.8801
+hopcount_med: 3
+copies_avg: 7.230096411887486
+total_copies_avg: 9.560878640294206
+buffertime_avg: 1924.0876
+buffertime_med: 67.0000
+custodiantime_avg: 14793.7307
+rtt_avg: NaN
+rtt_med: NaN

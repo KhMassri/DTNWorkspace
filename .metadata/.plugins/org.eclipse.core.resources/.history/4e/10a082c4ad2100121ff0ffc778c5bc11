@@ -1,0 +1,23 @@
+Message stats for scenario FadToFadSinkBS0.6kMT120,121
+sim_time: 341042.0000
+created: 2501
+started: 66988
+relayed: 66656
+aborted: 332
+dropped: 31476
+removed: 35869
+delivered: 1589
+delivery_prob: 0.6353
+response_prob: 0.0000
+overhead_ratio: 40.9484
+latency_avg: 8928.1768
+latency_med: 2240.0000
+hopcount_avg: 2.9125
+hopcount_med: 3
+copies_avg: 5.166706021251476
+total_copies_avg: 15.954663518299881
+buffertime_avg: 847.1879
+buffertime_med: 2.0000
+custodiantime_avg: 8711.8444
+rtt_avg: NaN
+rtt_med: NaN

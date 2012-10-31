@@ -1,0 +1,23 @@
+Message stats for scenario LWFadToFadSinkBS8kMT30,31
+sim_time: 341042.0000
+created: 10001
+started: 235360
+relayed: 235275
+aborted: 84
+dropped: 220661
+removed: 16324
+delivered: 5468
+delivery_prob: 0.5467
+response_prob: 0.0000
+overhead_ratio: 42.0276
+latency_avg: 7588.7359
+latency_med: 6343.0000
+hopcount_avg: 3.4120
+hopcount_med: 3
+copies_avg: 14.338066193380662
+total_copies_avg: 23.97840215978402
+buffertime_avg: 4036.9954
+buffertime_med: 2861.0000
+custodiantime_avg: 95289.5764
+rtt_avg: NaN
+rtt_med: NaN

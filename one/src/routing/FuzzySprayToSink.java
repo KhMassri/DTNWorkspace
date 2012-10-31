@@ -73,7 +73,7 @@ public class FuzzySprayToSink extends DTNRouter {
 				return;
 			
 			if(other.isSink()){
-				ackedMessageIds.addAll(((SinkRouter)other.getRouter()).getSinkedMessages());
+				ackedMessageIds.addAll(((SinkRouterOld)other.getRouter()).getSinkedMessages());
 				this.deleteAckedMessages();
 			
 			}

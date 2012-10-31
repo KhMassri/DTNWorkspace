@@ -1,0 +1,23 @@
+Message stats for scenario ZFadToSinkBS4kMT10,11
+sim_time: 341042.0000
+created: 25001
+started: 146811
+relayed: 146178
+aborted: 633
+dropped: 97350
+removed: 60252
+delivered: 12836
+delivery_prob: 0.5134
+response_prob: 0.0000
+overhead_ratio: 10.3881
+latency_avg: 5460.7566
+latency_med: 737.0000
+hopcount_avg: 2.5304
+hopcount_med: 2
+copies_avg: 3.5719371225150995
+total_copies_avg: 6.333466661333547
+buffertime_avg: 2365.0160
+buffertime_med: 438.0000
+custodiantime_avg: 15039.1886
+rtt_avg: NaN
+rtt_med: NaN

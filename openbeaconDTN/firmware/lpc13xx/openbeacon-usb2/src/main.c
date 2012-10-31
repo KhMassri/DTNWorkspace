@@ -640,7 +640,7 @@ main (void)
 
 
 				nRFAPI_SetRxMode(0);
-				nRF_tx (3);
+				nRF_tx (1);
 				pmu_sleep_ms(10);
 
 

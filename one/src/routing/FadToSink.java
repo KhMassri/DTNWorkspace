@@ -26,7 +26,7 @@ import core.SimClock;
 public class FadToSink extends DTNRouter {
 
 	/** Router's setting namespace ({@value})*/
-	public static final String FAD_TO_SINK_NS = "FadToSink";
+	public static final String FAD_TO_SINK_NS = "Fad";
 	/**  */
 	public static final String ALPHA = "alpha";
 	public static final String GAMMA = "gamma";

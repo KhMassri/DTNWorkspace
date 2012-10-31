@@ -100,9 +100,6 @@ public static final String SECONDS_FOR_TIME_OUT ="secondsForTimeOut";
 			delProb.put(other,(1-alpha)*getDelProbOf(other)+alpha);
 			lastUpdate.put(other,SimClock.getTime());
 			}
-		
-		
-		
 		}
 	
 	

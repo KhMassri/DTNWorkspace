@@ -1,0 +1,23 @@
+Message stats for scenario HpFadToFadSinkBS4kMT60,61
+sim_time: 341042.0000
+created: 5001
+started: 82312
+relayed: 81933
+aborted: 379
+dropped: 26017
+removed: 55758
+delivered: 4405
+delivery_prob: 0.8808
+response_prob: 0.0000
+overhead_ratio: 17.6000
+latency_avg: 17810.4974
+latency_med: 10378.0000
+hopcount_avg: 2.2297
+hopcount_med: 2
+copies_avg: 4.816036792641472
+total_copies_avg: 16.50249950009998
+buffertime_avg: 3957.6163
+buffertime_med: 6.0000
+custodiantime_avg: 68262.8291
+rtt_avg: NaN
+rtt_med: NaN

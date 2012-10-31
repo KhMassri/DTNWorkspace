@@ -134,7 +134,7 @@ public class ScarToSink extends DTNRouter
 			Nt.add(other.getAddress());
 			if(other.isSink())
 			{
-				sinkedMessages=new HashSet<String>(((SinkRouter)other.getRouter()).getSinkedMessages());
+				sinkedMessages=new HashSet<String>(((SinkRouterOld)other.getRouter()).getSinkedMessages());
 				removeOldMessages();
 				}
 			else neighb.add(other);

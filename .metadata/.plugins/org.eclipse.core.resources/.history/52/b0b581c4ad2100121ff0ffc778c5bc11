@@ -1,0 +1,23 @@
+Message stats for scenario FadBS1kMT120,121
+sim_time: 341042.0000
+created: 2501
+started: 24033
+relayed: 23920
+aborted: 113
+dropped: 14445
+removed: 9957
+delivered: 1832
+delivery_prob: 0.7325
+response_prob: 0.0000
+overhead_ratio: 12.0568
+latency_avg: 11244.8739
+latency_med: 4118.0000
+hopcount_avg: 2.8117
+hopcount_med: 3
+copies_avg: 5.130747700919632
+total_copies_avg: 9.831667333066774
+buffertime_avg: 3522.8680
+buffertime_med: 226.0000
+custodiantime_avg: 35362.0008
+rtt_avg: NaN
+rtt_med: NaN

@@ -38,7 +38,7 @@ public class Settings {
 	/** properties object where the setting files are read into */
 	protected static Properties props;
 	/** file name of the default settings file ({@value}) */
-	public static final String DEF_SETTINGS_FILE ="./setting/InfocomvsLevyWalk/base_settings.txt";
+	public static final String DEF_SETTINGS_FILE ="./setting/FadwithNC/base_settings.txt";
 	
 	/** 
 	 * Setting to define the file name where all read settings are written

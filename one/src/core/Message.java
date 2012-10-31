@@ -277,6 +277,7 @@ public class Message implements Comparable<Message> {
 		this.requestMsg  = m.requestMsg;
 		this.initTtl = m.initTtl;
 		this.appID = m.appID;
+		this.id = m.id;
 		
 		this.label = m.label;
 		this.temp = m.temp;

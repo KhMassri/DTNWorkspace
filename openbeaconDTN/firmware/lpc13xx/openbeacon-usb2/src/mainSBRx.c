@@ -405,7 +405,9 @@ main (void)
 	uint8_t  status;
 	uint8_t volatile *uart;
 	volatile int t;
-	int i;
+	uint8_t i;
+
+
 
 	/* wait on boot - debounce */
 	for (t = 0; t < 2000000; t++);
@@ -503,6 +505,8 @@ main (void)
 
 	/***************** IF UNPLUGGED TO PC ........********/
 
+
+
 	/* Init Bluetooth */
 	bt_init (FALSE, tag_id);
 
@@ -532,7 +536,7 @@ main (void)
 			pmu_sleep_ms (500);
 		}
 	/* set retries to zero */
-	nRFAPI_TxRetries (1);
+	nRFAPI_TxRetries (0);
 	/* enable ACK */
 	//nRFAPI_SetPipeSizeRX (0, NRF_MAX_MAC_SIZE);
 	nRFAPI_PipesAck (ERX_P0);
@@ -589,7 +593,7 @@ main (void)
 
 				if (ntohs (dtnMsg.pkt.crc) == crc)
 				{
-					
+
 					g_Log.time = (dtnMsg.pkt.time);
 					g_Log.seq = (dtnMsg.pkt.seq);
 					g_Log.oid = ntohs (dtnMsg.pkt.to);
@@ -611,7 +615,7 @@ main (void)
 				status = nRFAPI_GetFifoStatus ();
 			}
 			while ((status & FIFO_RX_EMPTY) == 0);
-			
+
 			nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
 
 		}

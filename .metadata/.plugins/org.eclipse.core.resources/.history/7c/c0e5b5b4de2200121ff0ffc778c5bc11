@@ -1,0 +1,23 @@
+Message stats for scenario FtFadToFadSinkBS2kMT10,30
+sim_time: 341042.0000
+created: 15347
+started: 57741
+relayed: 57452
+aborted: 289
+dropped: 38999
+removed: 25792
+delivered: 7589
+delivery_prob: 0.4945
+response_prob: 0.0000
+overhead_ratio: 6.5704
+latency_avg: 6822.4032
+latency_med: 1388.0000
+hopcount_avg: 2.2954
+hopcount_med: 2
+copies_avg: 2.7707043721900044
+total_copies_avg: 4.2490389001107705
+buffertime_avg: 3070.8356
+buffertime_med: 584.0000
+custodiantime_avg: 13125.9079
+rtt_avg: NaN
+rtt_med: NaN

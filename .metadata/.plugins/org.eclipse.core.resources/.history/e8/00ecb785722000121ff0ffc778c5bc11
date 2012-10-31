@@ -1,0 +1,51 @@
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+
+public class M {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+	String id = "m2&m8";
+	String[] ids = id.split("&");
+	//System.out.print(ids.length);
+	
+	List<Set<String>> s= new ArrayList<Set<String>>();
+	Set<String> el =new HashSet<String>();
+	Set<String> ee =new HashSet<String>();
+
+	el.add("khalil");
+	el.add("dua");
+	s.add(el);
+	
+
+	ee.add("khlo");
+	ee.add("dd");
+	ee.add("the best elementas");
+	s.add(ee);
+	s.remove(el);
+	
+	for(Set se:s)
+		if(se.contains("khalil"))
+			System.out.println(se);
+
+	
+	/*if(ids.length>1)
+		System.out.print(new StringBuffer(id).reverse().toString());
+	else
+		System.out.print(id);*/
+
+
+
+}		
+
+
+
+
+}
