@@ -49,7 +49,7 @@ public class FadToFadSink extends DTNRouter {
 	private String ftStr="FaultToleranceValue";
 	private Comparator<DTNHost> neighbComparator;
 	private Comparator<Message> msgComparator;
-	private boolean dropped = true;
+	private int coding = 0;
 
 
 	public FadToFadSink(Settings settings) 
@@ -58,6 +58,7 @@ public class FadToFadSink extends DTNRouter {
 		Settings fadSettings = new Settings(FAD_TO_SINK_NS);
 		alpha= fadSettings.getDouble(ALPHA);
 		gamma= fadSettings.getDouble(GAMMA);
+		coding = fadSettings.getInt("coding");
 
 		secondsForTimeOut = fadSettings.getInt(SECONDS_FOR_TIME_OUT);
 
@@ -73,6 +74,7 @@ public class FadToFadSink extends DTNRouter {
 		super(r);
 		this.alpha=r.alpha;
 		this.gamma=r.gamma;
+		this.coding = r.coding;
 		threshold=(2-2*alpha)/(2-alpha);
 		this.secondsForTimeOut = r.secondsForTimeOut;
 		neighb=new ArrayList<DTNHost>();
@@ -113,6 +115,7 @@ public class FadToFadSink extends DTNRouter {
 	public void update() {
 		super.update();
 		timeOutUpdate();
+
 
 		if (!canStartTransfer() ||isTransferring()) {
 			return; // nothing to transfer or is currently transferring 
@@ -202,7 +205,7 @@ public class FadToFadSink extends DTNRouter {
 			return super.checkReceiving(m);
 
 		if((Double)oldest.getProperty(ftStr)<(Double)m.getProperty(ftStr))
-		//if(oldest.getHopCount()<m.getHopCount())
+			//if(oldest.getHopCount()<m.getHopCount())
 			return MessageRouter.DENIED_NO_SPACE;
 
 		return super.checkReceiving(m);
@@ -266,33 +269,41 @@ public class FadToFadSink extends DTNRouter {
 		return super.createNewMessage(msg);
 
 	}
-	
-	
+
+
 	protected boolean makeRoomForMessage(int size){
 		if (size > this.getBufferSize()) {
 			return false; // message too big for the buffer
 		}
-			
-		int freeBuffer = this.getFreeBufferSize();
+
+		/*Encode all possible messages*/
+		
+
+		
 		/* delete messages from the buffer until there's enough space */
-		while (freeBuffer < size) {
+		if(this.getFreeBufferSize() < size && coding == 1)
+			encode(size);
+		
+		while (this.getFreeBufferSize() < size) {
+
 			Message m = getOldestMessage(true); // don't remove msgs being sent
 
 			if (m == null) {
 				return false; // couldn't remove any more messages
 			}			
-			
+
 			/* delete message from the buffer as "drop" */
-			
-			deleteMessage(m.getId(),dropped);
-			freeBuffer += m.getSize();
+
+			deleteMessage(m.getId(),true);
+			//freeBuffer += m.getSize();
 		}
-		
+
 		return true;
 	}
-	
+
 
 	protected Message getOldestMessage(boolean excludeMsgBeingSent) {
+
 
 		Collection<Message> messagecol = this.getMessageCollection();
 		List<Message> messages = new ArrayList<Message>();
@@ -305,45 +316,56 @@ public class FadToFadSink extends DTNRouter {
 		}
 
 		Collections.sort(messages,msgComparator);
-
-		Message oldest=null;
-		Message old = null;
-
-
-		int i=messages.size()-1;
-		Message dead = messages.get(i);
-
-		while(i-- > 0)
-		{
-			if(messages.get(i).getId().contains("&"))
-				continue;
-			//if(messages.get(i).getHopCount()<1)
-			if((Double)messages.get(i).getProperty(ftStr) < 0.5*(1-(341042.00-SimClock.getIntTime())/341042.00))	
-				{
-				dropped = true;
-				return dead;
-				}
-			
-			if(oldest == null)
-				oldest = messages.get(i);
-			else
-			{
-				old = messages.get(i);
-				this.removeFromMessages(old.getId());
-				old.setID(old.getId()+"&"+oldest.getId());
-				this.addToMessages(old, false);
-				dropped = false;
-				return oldest;
-
-			}
-		}
-
-
-		dropped = true;
-		return dead;	
+		return messages.get(messages.size()-1);	
 	}
 
-	
+
+
+	private void encode(int size){
+		
+		int i;
+
+		do
+		{
+			Collection<Message> messagecol = this.getMessageCollection();
+			List<Message> messages = new ArrayList<Message>();
+
+
+			for (Message m : messagecol) {	
+				if (isSending(m.getId())) {
+					continue; // skip the message(s) that router is sending
+				}
+				messages.add(m);
+			}
+
+			Collections.sort(messages,msgComparator);
+			Message oldest=null;
+			Message old = null;
+			i=messages.size();
+
+			while(--i >=  0)
+			{
+				Message current = messages.get(i);
+				if(current.getId().contains("&"))
+					continue;
+				//if(current.getHopCount()>1)
+				if((Double)current.getProperty(ftStr) >= 0.5)
+					if(oldest == null)
+						oldest =current;
+					else
+					{
+						old = current;
+						this.removeFromMessages(old.getId());
+						old.setID(old.getId()+"&"+oldest.getId());
+						this.addToMessages(old, false);
+						this.deleteMessage(oldest.getId(), false);
+						break;
+					}
+			}
+
+		}while(this.getFreeBufferSize()<size && i>0);
+
+	}
 
 	private class MessageComparator implements Comparator<Message> {
 
@@ -351,7 +373,7 @@ public class FadToFadSink extends DTNRouter {
 			// delivery probability of tuple1's message with tuple1's connection
 			//int p1 = m1.getHopCount(); 
 			//int p2 = m2.getHopCount();
-			
+
 			double p1 = (Double)m1.getProperty(ftStr);
 			double p2 = (Double)m2.getProperty(ftStr);
 

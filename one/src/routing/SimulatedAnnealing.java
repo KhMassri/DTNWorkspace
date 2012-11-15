@@ -7,9 +7,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import routing.maxprop.MeetingProbabilitySet;
 
@@ -37,24 +39,24 @@ public class SimulatedAnnealing extends DTNRouter {
 	/**  */
 	public static final String ALPHA = "alpha";
 	private double alpha;
-	private double threshold;
-	public static final String SECONDS_FOR_TIME_OUT ="secondsForTimeOut";
-	/** the value of nrof seconds for time out -setting */
-	private int secondsForTimeOut;
-	private Map<DTNHost, Double> delProb;
-	private Map<DTNHost, Double> lastUpdate;
-
-
 
 	private MeetingProbabilitySet probs;
+	double cdc;
+	private double lastNUpdate;
+	private Set<Integer> Nt;
+	private Set<Integer> Nt_1;
+
+	private String FTCStr="FTCValue";
 
 
 	public SimulatedAnnealing(Settings settings) 
 	{
 		super(settings);
 		Settings SimulatedAnnealingSettings = new Settings(SimulatedAnnealing_NS);
-		alpha= SimulatedAnnealingSettings.getDouble(ALPHA);
-		secondsForTimeOut = SimulatedAnnealingSettings.getInt(SECONDS_FOR_TIME_OUT);
+		if(SimulatedAnnealingSettings.contains(ALPHA))
+			alpha= SimulatedAnnealingSettings.getDouble(ALPHA);
+		else
+			alpha = 1;
 
 	}
 
@@ -66,13 +68,12 @@ public class SimulatedAnnealing extends DTNRouter {
 	protected SimulatedAnnealing(SimulatedAnnealing r) 
 	{
 		super(r);
-		this.probs = new MeetingProbabilitySet(150, 1);
-
 		this.alpha=r.alpha;
-		threshold=(2-2*alpha)/(2-alpha);
-		this.secondsForTimeOut = r.secondsForTimeOut;
-		delProb=new HashMap<DTNHost,Double>();
-		lastUpdate=new HashMap<DTNHost,Double>();
+		this.probs = new MeetingProbabilitySet(80, alpha);
+
+		/*to computer change degree of connections*/
+		Nt=new HashSet<Integer>();
+		Nt_1=new HashSet<Integer>();
 
 
 	}
@@ -80,23 +81,36 @@ public class SimulatedAnnealing extends DTNRouter {
 	public void changedConnection(Connection con) 
 	{
 		DTNHost otherHost=con.getOtherNode(getHost());
-		SimulatedAnnealing other = (SimulatedAnnealing)otherHost.getRouter();
+		MessageRouter oth = otherHost.getRouter();
 
-		if(con.isUp()&&other.hello().equals("DTNRouter"))
+		if(con.isUp()&&oth.hello().equals("DTNRouter"))
+
 		{
-			delProb.put(otherHost,(1-alpha)*getDelProbOf(otherHost)+alpha);
-			lastUpdate.put(otherHost,SimClock.getTime());
+			SimulatedAnnealing other = (SimulatedAnnealing)oth;
+			/*
+			 * Update meeting probability
+			 * */
+			if(con.isInitiator(getHost()))
+			{
+				probs.updateMeetingProbFor(otherHost.getAddress());
+				other.probs.updateMeetingProbFor(this.getHost().getAddress());
 
-			for(Message m:this.getMessageCollection())
-				m.incTemp();
+				/*update the neighbers set*/
+				Nt.add(otherHost.getAddress());
+				other.Nt.add(this.getHost().getAddress());
 
-					if(con.isInitiator(getHost()))
-					{
-						probs.updateMeetingProbFor(otherHost.getAddress());
-						other.probs.updateMeetingProbFor(getHost().getAddress());
-					}
+				updateCdc();
+				other.updateCdc();
+				/*
+				 *Heating process 
+				 * */
+				for(Message m:this.getMessageCollection())
+					m.incTemp();
 
+				for(Message m:other.getMessageCollection())
+					m.incTemp();
 
+			}
 
 		}
 
@@ -108,13 +122,12 @@ public class SimulatedAnnealing extends DTNRouter {
 
 		super.update();
 
-		timeOutUpdate();
 
 		if (!canStartTransfer() ||isTransferring()) {
 			return; // nothing to transfer or is currently transferring 
 		}
 
-		if(this.exchangeDeliverableMessages() != null)
+		if(this.tryMessagesForSinks() != null)
 			return;
 
 		tryOtherMessages();		
@@ -159,56 +172,50 @@ public class SimulatedAnnealing extends DTNRouter {
 			{
 				DTNHost to = m.getTo();
 
-//				if (getDelProbOf(to) < threshold *(other.getDelProbOf(to))) 
-				if(this.probs.getProbFor(to.getAddress()) < other.probs.getProbFor(to.getAddress()))
+				double ua=0,ub=0;
+
+				ua = (this.probs.getProbFor(to.getAddress()) + 2*cdc)/3;
+				ub = (other.probs.getProbFor(to.getAddress()) + 2*other.cdc)/3;
+
+
+				if(ua < ub)
 				{
 					if(startTransfer(m, con)!=RCV_OK)
 						continue;
 
 					if(!(m.getState().equals("MAX")))
 						this.deleteMessage(m.getId(), false);
-					// local maximum case,,, keep a LM replica
-
-					else{
-						//System.out.println("Rep"+(this.probs.getProbFor(to.getAddress())- other.probs.getProbFor(to.getAddress())));
+					else
 						m.setState("LM");
-					}
-					
+
+					m.updateProperty(FTCStr,(Integer)m.getProperty(FTCStr)+1 );
+
+
 					return con;	
 				}
 
-				// msg in the cooling process
 
-				else if(m.getState().equals("DOWN") || m.getState().equals("MAX"))
+
+				if(m.getState().equals("DOWN") || m.getState().equals("MAX"))
 				{
-					
-					
-					double d = Math.exp(
-							(		other.probs.getProbFor(to.getAddress()) - 
-									this.probs.getProbFor(to.getAddress())
-									)	/ (m.getTemp())
-							);
-//
-//					System.out.println(other.probs.getProbFor(to.getAddress()) - 
-//							this.probs.getProbFor(to.getAddress())
-//							+" exp "+d);
+					if (m.getHops().contains(oth))
+						continue;
 
 
-//				if(Math.exp((other.getDelProbOf(to)-this.getDelProbOf(to)) / (m.getTemp())) >= Math.random())
-					if(d >= Math.random())
+					boolean send = Math.exp((ub - ua)/ (0.1*m.getTemp())) >= Math.random();
 
+
+					if(send) 
 						if(startTransfer(m, con)!=RCV_OK)
 							continue;
-						
-						if(m.getState().equals("DOWN"))
-							this.deleteMessage(m.getId(), false);
-						// local maximum case,,, keep a LM replica
 
-						else{
-						//	System.out.println("Rep"+(this.probs.getProbFor(to.getAddress())- other.probs.getProbFor(to.getAddress())));
-							m.setState("LM");
-						}
-												
+					if(m.getState().equals("DOWN"))
+						this.deleteMessage(m.getId(), false);
+					// local maximum case,,, keep a LM replica
+					else
+						m.setState("LM");
+
+					m.updateProperty(FTCStr,(Integer)m.getProperty(FTCStr)+1 );
 					return con;
 
 				}
@@ -218,35 +225,24 @@ public class SimulatedAnnealing extends DTNRouter {
 	}	
 
 
+	protected int checkReceiving(Message m) {
 
-	private double getDelProbOf(DTNHost to) {
 
-		if(delProb.containsKey(to))
-			return delProb.get(to);
+		int recvCheck = super.checkReceiving(m); 
 
-		return 0;
+		if (recvCheck == RCV_OK) {
+			/* don't accept a message that has already traversed this node */
+			if (m.getState().equals("DOWN") && m.getHops().contains(getHost())) {
+				recvCheck = DENIED_OLD;
+			}
+		}
+
+		return recvCheck;
 	}
 
 
 
-	protected int checkReceiving(Message m) {
 
-		
-			int recvCheck = super.checkReceiving(m); 
-			
-			if (recvCheck == RCV_OK) {
-				/* don't accept a message that has already traversed this node */
-				if (m.getState().equals("DOWN") && m.getHops().contains(getHost())) {
-					recvCheck = DENIED_OLD;
-				}
-			}
-			
-			return recvCheck;
-		}
-		
-
-
-	
 	protected int startTransfer(Message m, Connection con)
 	{
 		int retVal;
@@ -277,31 +273,6 @@ public class SimulatedAnnealing extends DTNRouter {
 	}
 
 
-	private void timeOutUpdate() {
-
-		for(Connection con:this.getConnections())
-		{
-			DTNHost other = con.getOtherNode(getHost());
-
-			if(other.getRouter().hello().equals("DTNRouter"))
-				if (SimClock.getTime() - lastUpdate.get(other) >= secondsForTimeOut)
-				{
-					delProb.put(other,(1-alpha)*getDelProbOf(other)+alpha);
-					lastUpdate.put(other,SimClock.getTime());
-
-				}
-
-		}
-
-		for(Entry<DTNHost, Double> e:delProb.entrySet()){
-			DTNHost node=e.getKey();
-			if (SimClock.getTime() - lastUpdate.get(node) < secondsForTimeOut)
-				continue;
-			delProb.put(node,(1-alpha)*getDelProbOf(node));
-			lastUpdate.put(node,SimClock.getTime());
-		}
-
-	}
 
 
 
@@ -324,7 +295,12 @@ public class SimulatedAnnealing extends DTNRouter {
 	}
 
 
+	public boolean createNewMessage(Message m) {
 
+		m.addProperty(FTCStr, new Integer(1));
+
+		return super.createNewMessage(m);
+	}
 
 
 
@@ -376,29 +352,57 @@ public class SimulatedAnnealing extends DTNRouter {
 		return top;
 	}
 
+	
+	
+	
 	public Message messageTransferred(String id, DTNHost from) {
 		Message m = super.messageTransferred(id, from);
-		
-	//	System.out.println(m+"  "+m.getState()+"  tmp" + m.getTemp()+"  from  "+from.getAddress()+"  to  " + this.getHost().getAddress()+ " is delivered  "+ (this.getHost().getAddress()==m.getTo().getAddress()));
-
 
 		if(m.getState().equals("UP"))
 			m.setTemp(0);
-		
-//		m.getTemp()*0.5 * (
-//				(((SimulatedAnnealing)(from.getRouter())).probs.getProbFor(m.getTo().getAddress())) / 
-//				(((SimulatedAnnealing)(this)).probs.getProbFor(m.getTo().getAddress()))
-//				)
-//				);
 		else if(m.getState().equals("DOWN"))
 			m.decTemp();
-		else if(m.getState().equals("MAX"))
+
+		else if(m.getState().equals("MAX")){
 			m.setState("DOWN");
+			m.decTemp();
+			m.updateProperty(FTCStr,(Integer)m.getProperty(FTCStr)+1 );
+
+		}
 
 
 		return m;
 	}
 
+
+	private void updateCdc() {
+
+
+
+		if(SimClock.getTime()>=lastNUpdate+500){
+			double curCdc;
+			Set<Integer> union = new HashSet<Integer>();
+			union.addAll(Nt_1);union.addAll(Nt);
+			curCdc=union.size()-(Nt.size()+Nt_1.size()-union.size());
+			if(curCdc!=0)
+				curCdc=curCdc/union.size();
+
+			cdc = (1 - 0.85)*cdc + 0.85*curCdc;
+			//cdc = curCdc;
+
+
+			Nt_1.removeAll(Nt_1);
+			Nt_1.addAll(Nt);
+			Nt.removeAll(Nt);
+			lastNUpdate=SimClock.getTime();	
+
+
+
+
+
+		}
+
+	}
 
 	@Override
 	public MessageRouter replicate() {

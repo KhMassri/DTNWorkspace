@@ -66,8 +66,8 @@ static const uint32_t xxtea_key[XXTEA_BLOCK_COUNT] = {
 static const unsigned char broadcast_mac[NRF_MAX_MAC_SIZE] = {0xE7,0xD3,0xF0,0x35,0x77};
 
 /* OpenBeacon packet */
-static DTNMessageEnvelope dtnMsg;
-//static TLogfileBeaconPacket g_Log;
+static DTNMsgEnvelope dtnMsg;
+static TLogfileDTNMsg g_Log;
 
 
 static uint32_t
@@ -393,19 +393,22 @@ blink (uint8_t times)
 
 int
 /***************************************************************************/
-/*************************MAIN**********************************************/
+/*******************************MAIN****************************************/
 
 main (void)
+
 {
 
 
 	uint32_t SSPdiv;
 	uint8_t cmd_buffer[64], cmd_pos, c;
-	//uint16_t crc;
-	//uint8_t  status;
+	uint16_t crc;
+	uint8_t  status;
 	uint8_t volatile *uart;
 	volatile int t;
-	int i;
+	uint8_t i,T,IRQ;
+
+
 
 	/* wait on boot - debounce */
 	for (t = 0; t < 2000000; t++);
@@ -503,6 +506,8 @@ main (void)
 
 	/***************** IF UNPLUGGED TO PC ........********/
 
+
+
 	/* Init Bluetooth */
 	bt_init (FALSE, tag_id);
 
@@ -531,22 +536,23 @@ main (void)
 			GPIOSetValue (1, 2, 0);
 			pmu_sleep_ms (500);
 		}
+	//nRFAPI_SetTxMAC (mac, mac_size);
 	/* set retries to zero */
-	nRFAPI_TxRetries (1);
+	nRFAPI_TxRetries (0);
 	/* enable ACK */
 	//nRFAPI_SetPipeSizeRX (0, NRF_MAX_MAC_SIZE);
-	nRFAPI_PipesAck (ERX_P0);
 	nRFAPI_PipesEnable (ERX_P0);
+	nRFAPI_PipesAck (ERX_P0);
+
 	/* set tx power power to high */
-	nRFCMD_Power (1);
-
-
+	//nRFCMD_Power (1);
 	//nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 
 
 
 	/* blink three times to show flash initialized RF interface */
 	blink (3);
+
 	/***************////****************MAIN TASK************/////**********************/
 
 
@@ -557,108 +563,186 @@ main (void)
 
 
 	while (1)
-
 	{
-
 		nRFAPI_SetRxMode (1);
-		nRFCMD_CE (0);
-		pmu_sleep_ms (2);
+		pmu_sleep_ms (2); // from pwr_down to stand_by state
 
+		nRFCMD_CE (1);
+		T = 100+rnd(500);
+		IRQ = 0;
 		/* fire up LED to indicate lsitning */
 		GPIOSetValue (1, 1, 1);
-		/* light LED for 2ms */
-		pmu_sleep_ms (100+rnd(1000)); //it was 20 sensing packets
-		/* turn LED off */
-		GPIOSetValue (1, 1, 0);
 
+		// start contention phase
+
+		while(T > 20 && !IRQ)
+		{
+			pmu_sleep_ms (20);
+			T =T-20;
+			IRQ = nRFCMD_IRQ ();
+		}
+
+
+		GPIOSetValue (1, 1, 0);
+		nRFCMD_CE (0);
 
 		/**** if there is incomming packet recieve it *******/
-		/*if (nRFCMD_IRQ ())
-		{
-			do
-			{				
+		if (IRQ)
+		{ // check wherther it is a RTS or not
+			nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
+			xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
+			crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
+			if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_RTS)
+			{
+				// send CTS
+				nRFAPI_SetRxMode(1);
+				nRFCMD_CE (1);
+				pmu_sleep_ms (2); //Carrier detect
+				nRFCMD_CE (0);
 
-				// read packet from nRF chip
-
-				nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
-				// adjust byte order and decode
-				xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
-				// verify the CRC checksum
-				crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.pkt.crc));
-
-				if (ntohs (dtnMsg.pkt.crc) == crc)
+				if ((nRFAPI_CarrierDetect () != 0x01))
 				{
-					g_sequence++;
-					GPIOSetValue (1, 2, 1);
-					// light LED for 2ms
-					pmu_sleep_ms (500); //it was 20 sensing packets
-					// turn LED off
-					GPIOSetValue (1, 2, 0);	
+					bzero (&dtnMsg, sizeof (dtnMsg));
+					dtnMsg.msg.from = htons (tag_id);
+					dtnMsg.proto = RFBPROTO_CTS;
+					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
+					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
+					nRFAPI_SetRxMode(0);
+					nRF_tx (3);
 
-					g_Log.time = (dtnMsg.pkt.time);
-					g_Log.seq = (dtnMsg.pkt.seq);
-					g_Log.oid = ntohs (dtnMsg.pkt.to);
-					g_Log.strength = ntohs (dtnMsg.pkt.ft);
-					g_Log.crc = crc8 (((uint8_t *) & g_Log),sizeof (g_Log) - sizeof (g_Log.crc));
-					// store data if space left on FLASH
-					if (g_storage_items < (LOGFILE_STORAGE_SIZE/sizeof (g_Log)))
+					// ready 40 ms to receive DTNMsg, need to be modified for longer window
+					nRFAPI_SetRxMode (1);
+					nRFCMD_CE (1);
+					GPIOSetValue (1, 1, 1);
+					pmu_sleep_ms (100);
+					GPIOSetValue (1, 1, 0);
+					nRFCMD_CE (0);
+					/**** if there is incomming packet recieve it *******/
+
+					if (nRFCMD_IRQ ())
 					{
 
+						do
+						{
+							nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
+							xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
+							crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
+							if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_DTN_MSG)
+							{
+								GPIOSetValue (1, 2, 1);
+								// light LED for 2ms
+								pmu_sleep_ms (500);
+								// turn LED off
+								GPIOSetValue (1, 2, 0);
 
-						storage_write (g_storage_items * sizeof (g_Log), sizeof (g_Log), &g_Log);
-						// increment and store RAM persistent storage position
-						g_storage_items ++;
+								g_Log.time = ntohl(dtnMsg.msg.time);
+								g_Log.seq = ntohl(dtnMsg.msg.seq);
+								g_Log.from = ntohs (dtnMsg.msg.from);
+								g_Log.prop = dtnMsg.msg.prop;
+								g_Log.crc = crc8 (((uint8_t *) & g_Log),sizeof (g_Log) - sizeof (g_Log.crc));
+								// store data if space left on FLASH
+								if (g_storage_items < (LOGFILE_STORAGE_SIZE/sizeof (g_Log)))
+								{
+
+
+									storage_write (g_storage_items * sizeof (g_Log), sizeof (g_Log), &g_Log);
+									// increment and store RAM persistent storage position
+									g_storage_items ++;
+								}
+							}
+							// get status
+							status = nRFAPI_GetFifoStatus ();
+						}
+						while ((status & FIFO_RX_EMPTY) == 0);
 					}
 				}
-				// get status
-				status = nRFAPI_GetFifoStatus ();
+
+
+
 			}
-			while ((status & FIFO_RX_EMPTY) == 0);
+
+
 			nRFCMD_CE (0);
 			nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
+			nRFAPI_FlushRX ();
+		}
 
-		}*/
 
 
 		/**********************************************************************/
-		//else {
+		else {   // sending RTS
+
+
+
 
 			nRFCMD_CE (1);
-			pmu_sleep_ms (10); //Carrier detect
+			pmu_sleep_ms (2); //Carrier detect
 			nRFCMD_CE (0);
-			pmu_sleep_ms (2);
 
 			if ((nRFAPI_CarrierDetect () != 0x01) && (g_sequence < 10))
 			{
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
-				dtnMsg.pkt.to = htons (tag_id);
-				dtnMsg.pkt.ft = 0;
-				dtnMsg.pkt.time= htonl (LPC_TMR32B0->TC);
-				dtnMsg.pkt.seq = htonl (g_sequence);
-				dtnMsg.pkt.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.pkt.crc)));
-
-
+				dtnMsg.msg.from = htons (tag_id);
+				dtnMsg.proto = RFBPROTO_RTS;
+				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
+				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 				nRFAPI_SetRxMode(0);
-				nRF_tx (1);
-				pmu_sleep_ms(10);
+				nRF_tx (3);
 
+				// ready 40 ms to receive DTNMsg, need to be modified for longer window
+				nRFAPI_SetRxMode (1);
+				nRFCMD_CE (1);
+				GPIOSetValue (1, 1, 1);
+				pmu_sleep_ms (40);
+				GPIOSetValue (1, 1, 0);
+				nRFCMD_CE (0);
+				/**** if there is incomming packet recieve it *******/
 
-				//get FIFO status 
-				if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
+				if (nRFCMD_IRQ ())
 				{
-					//if ACK from alarm_mac, disable alarm 
-					g_sequence++;
-				}
-				else
-				{
-					nRFAPI_FlushTX ();
 
+					nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
+					xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
+					crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
+
+					// if it is valid CTS msg then send DTNMsg
+					if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_CTS)
+					{
+						//Send DTNMsg
+						bzero (&dtnMsg, sizeof (dtnMsg));
+						dtnMsg.msg.from = htons (tag_id);
+						dtnMsg.msg.proto = RFBPROTO_DTN_MSG;
+						dtnMsg.msg.prop = 5;
+						dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
+						dtnMsg.msg.seq = htonl (g_sequence);
+						dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
+
+
+						nRFAPI_SetRxMode(0);
+						nRF_tx (3);
+						pmu_sleep_ms(5); //wait ack
+						//get FIFO status
+						if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
+						{
+							//if ACK from alarm_mac, disable alarm
+							g_sequence++;
+						}
+						else
+						{
+							nRFAPI_FlushTX ();
+
+						}
+
+
+
+					}
 				}
+
 
 
 			}
-		//}
+		}
 
 		nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
 		nRFAPI_PowerDown ();

@@ -19,7 +19,7 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-*/
+ */
 
 #ifndef __OPENBEACON_PROTO_H__
 #define __OPENBEACON_PROTO_H__
@@ -39,6 +39,12 @@
 #define RFBPROTO_PROXTRACKER            42
 #define RFBPROTO_PROXREPORT             69
 #define RFBPROTO_PROXREPORT_EXT         70
+/********************************************/
+#define RFBPROTO_PREAMBLE				100
+#define RFBPROTO_RTS					101
+#define RFBPROTO_CTS					102
+#define RFBPROTO_DTN_MSG				103
+/********************************************/
 
 #define PROX_MAX 4
 #define PROX_TAG_ID_BITS 12
@@ -73,92 +79,130 @@
 
 typedef struct
 {
-  uint8_t proto, proto2;
-  uint8_t flags, strength;
-  uint32_t seq;
-  uint32_t oid;
-  uint16_t reserved;
-  uint16_t crc;
+	uint8_t proto, proto2;
+	uint8_t flags, strength;
+	uint32_t seq;
+	uint32_t oid;
+	uint16_t reserved;
+	uint16_t crc;
 } PACKED TBeaconTrackerOld;
 
 typedef struct
 {
-  uint8_t strength;
-  uint16_t oid_last_seen;
-  uint16_t time;
-  uint8_t battery;
-  uint32_t seq;
+	uint8_t strength;
+	uint16_t oid_last_seen;
+	uint16_t time;
+	uint8_t battery;
+	uint32_t seq;
 } PACKED TBeaconTracker;
 
 typedef struct
 {
-  uint16_t oid_prox[PROX_MAX];
-  uint16_t seq;
+	uint16_t oid_prox[PROX_MAX];
+	uint16_t seq;
 } PACKED TBeaconProx;
 
 typedef struct
 {
-  uint8_t opcode, res;
-  uint32_t data[2];
+	uint8_t opcode, res;
+	uint32_t data[2];
 } PACKED TBeaconReaderCommand;
 
 typedef struct
 {
-  uint8_t opcode, strength;
-  uint32_t uptime, ip;
+	uint8_t opcode, strength;
+	uint32_t uptime, ip;
 } PACKED TBeaconReaderAnnounce;
 
 typedef union
 {
-  TBeaconProx prox;
-  TBeaconTracker tracker;
-  TBeaconReaderCommand reader_command;
-  TBeaconReaderAnnounce reader_announce;
+	TBeaconProx prox;
+	TBeaconTracker tracker;
+	TBeaconReaderCommand reader_command;
+	TBeaconReaderAnnounce reader_announce;
 } PACKED TBeaconPayload;
 
 typedef struct
 {
-  uint8_t proto;
-  uint16_t oid;
-  uint8_t flags;
+	uint8_t proto;
+	uint16_t oid;
+	uint8_t flags;
 
-  TBeaconPayload p;
+	TBeaconPayload p;
 
-  uint16_t crc;
+	uint16_t crc;
 } PACKED TBeaconWrapper;
 
 typedef union
 {
-  uint8_t proto;
-  TBeaconWrapper pkt;
-  TBeaconTrackerOld old;
-  uint32_t block[XXTEA_BLOCK_COUNT];
-  uint8_t byte[XXTEA_BLOCK_COUNT * 4];
+	uint8_t proto;
+	TBeaconWrapper pkt;
+	TBeaconTrackerOld old;
+	uint32_t block[XXTEA_BLOCK_COUNT];
+	uint8_t byte[XXTEA_BLOCK_COUNT * 4];
 } PACKED TBeaconEnvelope;
+
+/************************************************/
+typedef struct
+{
+	uint8_t proto;
+	uint32_t time, seq;
+	uint16_t from;
+	uint16_t info;
+	uint8_t temp;
+	uint16_t crc;
+} PACKED RTS;
 
 typedef struct
 {
-  uint32_t time, seq;
-  uint16_t to;
-  uint8_t ft;
-  uint8_t tem;
-  uint16_t temp;
-  uint16_t crc;
-} PACKED DTNMessage;
+	uint8_t proto;
+	uint32_t time, seq;
+	uint16_t from;
+	uint16_t info;
+	uint8_t temp;
+	uint16_t crc;
+} PACKED CTS;
+
+typedef struct
+{
+	uint8_t proto;
+	uint32_t time;
+	uint32_t seq;
+	uint16_t from;
+	uint16_t data;
+	uint8_t prop;
+	uint16_t crc;
+} PACKED DTNMsg;
 
 
 typedef union
 {
-  DTNMessage pkt;
-  uint32_t block[XXTEA_BLOCK_COUNT];
-  uint8_t byte[XXTEA_BLOCK_COUNT * 4];
-} PACKED DTNMessageEnvelope;
+	uint8_t proto;
+	RTS rts;
+	CTS cts;
+	DTNMsg msg;
+	uint32_t block[XXTEA_BLOCK_COUNT];
+	uint8_t byte[XXTEA_BLOCK_COUNT * 4];
+} PACKED DTNMsgEnvelope;
 
 typedef struct
 {
-  uint32_t time;
-  uint32_t seq;
-  uint16_t oid;
-  uint8_t strength, crc;
+	uint32_t time;
+	uint32_t seq;
+	uint16_t from;
+	uint8_t prop;
+	uint8_t  crc;
+} PACKED TLogfileDTNMsg;
+
+
+/**********************************************************/
+
+
+typedef struct
+{
+	uint32_t time;
+	uint32_t seq;
+	uint16_t oid;
+	uint8_t strength, crc;
 } PACKED TLogfileBeaconPacket;
 #endif/*__OPENBEACON_PROTO_H__*/

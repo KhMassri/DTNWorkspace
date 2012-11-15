@@ -1,0 +1,59 @@
+Scenario.name = %%Group.router%%SP%%GridRW.spltDist%%TTL%%Group3.msgTtl%%Hosts%%Group3.nrofHosts%%Seed%%MovementModel.rngSeed%%
+Scenario.endTime = 12000
+Optimization.endOfEventProcessing = 10000 
+Scenario.useRealNode = 0
+MovementModel.worldSize = 120,120
+
+Group.router = GridRW 
+
+#DecisionEngineRouter.decisionEngine = [WnSDecisionEngine;SnWDecisionEngine]
+
+#SimAnn.alpha = 1
+#SnF.nrofCopies = 4
+#SnW.nrofCopies = 1
+#WnS.nrofCopies = 2
+
+GridRW.nrofCopies = 2
+GridRW.spltDist = 20
+#[0;10;20;30;40;50;60;70]
+
+Group3.msgTtl = 6
+#Group3.msgTtl = [1;1;1;1;1;1;1;1;2;2;2;2;2;2;2;2;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;6;6;6;6;6;6;6;6;7;7;7;7;7;7;7;7;8;8;8;8;8;8;8;8;9;9;9;9;9;9;9;9]
+Group3.movementModel = StationaryMovement 
+Group3.mode = 0
+Group3.direction = 90
+Group3.offset = 10
+Group3.nodeLocation = 10,10
+Group3.nrofHosts = [121]
+Group3.bufferSize = 100M
+
+Group3.speed = 0.8, 2
+MovementModel.rngSeed = [1]
+btInterface.transmitSpeed = 13k
+
+
+
+
+Events1.hosts = [0,1]
+Events1.tohosts = [60,61]
+Events1.interval = 60,120
+Events1.size = 25k,26k
+
+
+
+Report.reportDir = reports/rw/grid/splitTTl2
+
+
+#WnS.spltDist = 30
+#[250;200;150;100;75;50;30]
+#[200;200;200;200;200;200;200;250;250;250;250;250;250;250;300;300;300;300;300;300;300;350;350;350;350;350;350;350;400;400;400;400;400;400;400;450;450;450;450;450;450;450] 
+
+#Group2.groupID = dest
+#Group2.movementModel = RandomWalk
+#StationaryMovement 
+#Group2.mode = 0
+#Group2.lowLeft = 200,100
+#Group2.topRight = 200, 100
+#Group2.bufferSize = 100M
+#Group2.nrofHosts = 0
+

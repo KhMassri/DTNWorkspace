@@ -277,7 +277,6 @@ public class Message implements Comparable<Message> {
 		this.requestMsg  = m.requestMsg;
 		this.initTtl = m.initTtl;
 		this.appID = m.appID;
-		this.id = m.id;
 		
 		this.label = m.label;
 		this.temp = m.temp;
@@ -414,10 +413,15 @@ public class Message implements Comparable<Message> {
 	if(state.equals("UP") && temp < 100)
 	{
 		
-		temp=temp + 100/(Integer)this.getProperty("FTCValue");
+		//temp=temp + 100/(Integer)this.getProperty("FTCValue");
+		temp+=50;
+	
 		if(temp >= 100)
 			this.setState("MAX");
 	}
+	
+	
+		System.out.println(this + "inc T = "+temp);
 		
 	}
 
@@ -425,13 +429,17 @@ public class Message implements Comparable<Message> {
 		
 		if(state.equals("DOWN") && temp>0)
 		{
-			temp=temp - 50/(Integer)this.getProperty("FTCValue");
+			//temp=temp - 50/(Integer)this.getProperty("FTCValue");
+			temp-=50;
 			if(temp <= 0)
 			{
 				this.setState("UP");
 				temp=0;
 			}
 		}
+		
+		
+			System.out.println(this + "dec T = "+temp);
 		
 	}
 

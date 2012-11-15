@@ -70,11 +70,11 @@ public class SinkRouterOld extends ActiveRouter {
 		int result = super.checkReceiving(m);
 		
 		if (result == RCV_OK)
-			if (SinkRouter.insert(m))
+			//if (SinkRouter.insert(m))
 				return result;
 			else
 				return DENIED_OLD;
-		return result;
+		//return result;
 	}
 	
 	public static synchronized boolean insert(Message m){
@@ -97,8 +97,8 @@ public class SinkRouterOld extends ActiveRouter {
 	}
 	
 	@Override
-	public MessageRouter replicate() {
-		return new SinkRouter(this);
+	public MessageRouter replicate() {return null;
+		//return new SinkRouter(this);
 	}
 
 }

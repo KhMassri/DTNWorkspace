@@ -507,7 +507,7 @@ main (void)
 
 	blink (2);
 
-	bt_init (FALSE, tag_id);// can not make bt and nRF enabled at the same time !!!!!!
+	bt_init (FALSE, tag_id);// can not make bt and nRF enabled at the same time (maybe due to channel interference) !!!!!!
 		if (UARTCount)
 							{
 

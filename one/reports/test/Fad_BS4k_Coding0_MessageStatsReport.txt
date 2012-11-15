@@ -1,0 +1,23 @@
+Message stats for scenario Fad_BS4k_Coding0
+sim_time: 341042.0000
+created: 1008
+started: 3406389
+relayed: 3399468
+aborted: 6921
+dropped: 2980125
+removed: 417874
+delivered: 929
+delivery_prob: 0.9216
+response_prob: 0.0000
+overhead_ratio: 3658.2766
+latency_avg: 16272.3100
+latency_med: 10052.0000
+hopcount_avg: 2.8192
+hopcount_med: 2
+copies_avg: 255.5079365079365
+total_copies_avg: 3372.566468253968
+buffertime_avg: 124.9603
+buffertime_med: 0.0000
+custodiantime_avg: 457066.6050
+rtt_avg: NaN
+rtt_med: NaN

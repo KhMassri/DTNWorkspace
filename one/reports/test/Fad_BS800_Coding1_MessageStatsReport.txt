@@ -1,0 +1,23 @@
+Message stats for scenario Fad_BS800_Coding1
+sim_time: 341042.0000
+created: 2740
+started: 3941215
+relayed: 3933926
+aborted: 6853
+dropped: 3581423
+removed: 323614
+delivered: 1001
+delivery_prob: 0.3653
+response_prob: 0.0000
+overhead_ratio: 3928.9960
+latency_avg: 5697.1908
+latency_med: 748.0000
+hopcount_avg: 2.4725
+hopcount_med: 2
+copies_avg: 782.5897550111358
+total_copies_avg: 876.5400890868597
+buffertime_avg: 21.8159
+buffertime_med: 0.0000
+custodiantime_avg: 21134.1419
+rtt_avg: NaN
+rtt_med: NaN

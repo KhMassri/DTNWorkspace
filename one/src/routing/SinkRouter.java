@@ -69,7 +69,9 @@ public class SinkRouter extends ActiveRouter {
 		{
 
 			Message m = super.messageTransferred(id, from);
+			//System.out.println((Double)m.getProperty("FaultToleranceValue"));
 			sinkedMessages.add(m.getId());
+			System.out.println("-------------------------------Total sinked =  "+sinkedMessages.size());
 			checkCodeWords(m,from);
 			return m;
 
@@ -82,6 +84,8 @@ public class SinkRouter extends ActiveRouter {
 			Set<String> code = new HashSet<String>();
 			Collections.addAll(code, ids);
 			codeWords.add(code);
+
+
 
 			if(sinkedMessages.contains(ids[0]) && !sinkedMessages.contains(ids[1]))
 			{
@@ -108,12 +112,12 @@ public class SinkRouter extends ActiveRouter {
 			}
 
 
-			else
-				return null;
-
-
-
+			Message m = this.removeFromIncomingBuffer(id, from);
+			checkCodeWords(m,from);
+			return m;
 		}
+		
+
 
 	}
 

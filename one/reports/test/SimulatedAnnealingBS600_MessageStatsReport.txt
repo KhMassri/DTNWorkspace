@@ -1,0 +1,23 @@
+Message stats for scenario SimulatedAnnealingBS600
+sim_time: 341042.0000
+created: 1008
+started: 8429
+relayed: 8339
+aborted: 90
+dropped: 1007
+removed: 7678
+delivered: 603
+delivery_prob: 0.5982
+response_prob: 0.0000
+overhead_ratio: 12.8292
+latency_avg: 11811.3018
+latency_med: 4706.0000
+hopcount_avg: 4.5423
+hopcount_med: 3
+copies_avg: 2.072420634920635
+total_copies_avg: 2.1041666666666665
+buffertime_avg: 2477.0851
+buffertime_med: 3.0000
+custodiantime_avg: 22270.6874
+rtt_avg: NaN
+rtt_med: NaN

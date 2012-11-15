@@ -1,0 +1,25 @@
+Scenario.name = %%DecisionEngineRouter.decisionEngine%%%%Group3.movementModel%%Hosts%%Group3.nrofHosts%%BS%%Group3.bufferSize%%Seed%%MovementModel.rngSeed%%
+Scenario.endTime = 86400
+Optimization.endOfEventProcessing = 80000 
+Scenario.useRealNode = 0
+
+Group3.router = DecisionEngineRouter
+DecisionEngineRouter.decisionEngine = [SimAnnDecisionEngine;SnFDecisionEngine]
+
+SimAnn.alpha = 1
+SnF.nrofCopies = 4
+SnW.nrofCopies = 4
+
+
+Group3.movementModel = Community
+Group3.msgTtl = 1200
+Group3.nrofHosts = [30]
+Events1.hosts = [0,30]
+Events1.tohosts = [0,30]
+Events1.interval = 60,80
+Group3.bufferSize = [100k]
+Group3.speed = 0.3, 0.6
+MovementModel.rngSeed = [199]
+
+
+Report.reportDir = reports/SA

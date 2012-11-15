@@ -1,0 +1,148 @@
+#
+# Default settings for the simulation
+#
+
+## Scenario settings
+Scenario.name = Sapienza Test Scenario
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+# 43200s == 12h
+Scenario.endTime = 43200
+
+
+# "Bluetooth" interface for all nodes
+btInterface.type = SimpleBroadcastInterface
+# Transmit speed of 0.2 Mbps = 25.00kBps
+btInterface.transmitSpeed = 25k
+btInterface.transmitRange = 10
+
+
+
+# Define  different node groups
+Scenario.nrofHostGroups = 3
+
+# Common settings for all groups
+Group.movementModel = RandomWaypoint
+Group.router = FirstContact
+Group.bufferSize = 10k
+Group.waitTime = 0, 120
+# All nodes have the bluetooth interface
+Group.nrofInterfaces = 1
+Group.interface1 = btInterface
+# Walking speeds (2,8 - 7,2 Km/h)
+Group.speed = 0.8, 2.0
+# Message TTL of inf minutes
+Group.msgTtl = 3600
+Group.nrofHosts = 10
+
+# group1 Sinks nodes
+Group1.groupID = sink
+Group1.movementModel = StationaryMovement 
+Group1.mode = 1
+Group1.lowLeft = 0,0
+Group1.topRight = 100, 200
+Group1.router = SinkRouter
+Group1.bufferSize = 100M
+Group1.nrofHosts = 0
+
+# group2 Isolted nodes of WSN
+Group2.groupID = gen
+Group2.movementModel = StationaryMovement 
+Group2.mode = 1
+#Group2.router = GeneratorRouter
+Group2.lowLeft = 300,0
+Group2.topRight = 400, 200
+Group2.bufferSize = 100M
+Group2.nrofHosts = 0
+
+# group3 DTN nodes
+Group3.groupID = DTN
+Group3.nrofHosts = 100
+
+## Message creation parameters 
+# How many event generators
+Events.nrof = 1
+# Class of the first event generator
+Events1.class = MessageEventGenerator
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events1.interval = 60,180
+# Message sizes (100B - 200B)
+Events1.size = 100,200
+# range of message source/destination addresses
+Events1.hosts = 0,100
+Events1.tohosts = 0,100
+# Message ID prefix
+Events1.prefix = M
+
+
+MovementModel.worldSize = 400, 200
+MovementModel.warmup = 0
+
+GridBasedMovement.nrofGridFiles = 1
+GridBasedMovement.gridFile1 = data/grid.wkt
+
+Community.exitBoundaryProbability = 0.8
+Community.internalMovementModel = LevyWalk
+
+## levy Walk movement
+LevyWalk.alpha = 1.0
+LevyWalk.beta = 0.5
+LevyWalk.gamma =  0.79
+LevyWalk.k = 18.72
+LevyWalk.maxDistance = 50
+
+
+
+## Reports - all report names have to be valid report classes
+
+# how many reports to load
+Report.nrofReports = 1
+# length of the warm up period (simulated seconds)
+Report.warmup = 0
+# default directory of reports (can be overridden per Report with output setting)
+Report.reportDir = reports/
+# Report classes to load
+
+Report.report1 = MessageStatsReport 
+
+
+## Default settings for some routers settings
+Fad.secondsForTimeOut = 180
+Fad.alpha = 0.15
+Fad.gamma = 0.70
+
+#almost 5 days
+Scar.batExchLife = 1000000
+Scar.batTimeLife = 500000
+Scar.gamma = 0.1
+Scar.nrOfBackUp = 4
+
+Prophet.secondsInTimeUnit = 30
+
+SprayAndWait.nrofCopies = 4
+SprayAndWait.binaryMode = true
+
+## Optimization settings -- these affect the speed of the simulation
+## see World class for details.
+Optimization.cellSizeMult = 5
+Optimization.randomizeUpdateOrder = true
+# In seconds
+Optimization.endOfEventProcessing = 40000 
+
+
+## GUI settings
+
+# GUI underlay image settings
+GUI.UnderlayImage.fileName = data/helsinki_underlay.png
+# Image offset in pixels (x, y)
+GUI.UnderlayImage.offset = 64, 20
+# Scaling factor for the image
+GUI.UnderlayImage.scale = 4.75
+# Image rotation (radians)
+GUI.UnderlayImage.rotate = -0.015
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 100
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$

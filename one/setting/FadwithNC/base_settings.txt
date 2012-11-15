@@ -77,7 +77,7 @@ Events1.tohosts = 0,100
 Events1.prefix = M
 
 
-MovementModel.worldSize = 1000, 1000
+MovementModel.worldSize = 1000, 500
 MovementModel.warmup = 0
 
 GridBasedMovement.nrofGridFiles = 1
@@ -109,7 +109,7 @@ Report.warmup = 0
 Report.reportDir = reports/
 # Report classes to load
 
-Report.report1 = MessageStatsReport 
+Report.report1 = MessageStatsReport
 
 ## GUI settings
 

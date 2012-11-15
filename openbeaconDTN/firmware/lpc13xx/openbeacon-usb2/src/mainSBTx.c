@@ -66,7 +66,7 @@ static const uint32_t xxtea_key[XXTEA_BLOCK_COUNT] = {
 static const unsigned char broadcast_mac[NRF_MAX_MAC_SIZE] = {0xE7,0xD3,0xF0,0x35,0x77};
 
 /* OpenBeacon packet */
-static DTNMessageEnvelope dtnMsg;
+static DTNMsgEnvelope dtnMsg;
 //static TLogfileBeaconPacket g_Log;
 
 
@@ -584,9 +584,9 @@ main (void)
 				// adjust byte order and decode
 				xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
 				// verify the CRC checksum
-				crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.pkt.crc));
+				crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
 
-				if (ntohs (dtnMsg.pkt.crc) == crc)
+				if (ntohs (dtnMsg.msg.crc) == crc)
 				{
 					g_sequence++;
 					GPIOSetValue (1, 2, 1);
@@ -595,10 +595,10 @@ main (void)
 					// turn LED off
 					GPIOSetValue (1, 2, 0);	
 
-					g_Log.time = (dtnMsg.pkt.time);
-					g_Log.seq = (dtnMsg.pkt.seq);
-					g_Log.oid = ntohs (dtnMsg.pkt.to);
-					g_Log.strength = ntohs (dtnMsg.pkt.ft);
+					g_Log.time = (dtnMsg.msg.time);
+					g_Log.seq = (dtnMsg.msg.seq);
+					g_Log.oid = ntohs (dtnMsg.msg.from);
+					g_Log.strength = ntohs (dtnMsg.msg.prop);
 					g_Log.crc = crc8 (((uint8_t *) & g_Log),sizeof (g_Log) - sizeof (g_Log.crc));
 					// store data if space left on FLASH
 					if (g_storage_items < (LOGFILE_STORAGE_SIZE/sizeof (g_Log)))
@@ -632,11 +632,11 @@ main (void)
 			{
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
-				dtnMsg.pkt.to = htons (tag_id);
-				dtnMsg.pkt.ft = 0;
-				dtnMsg.pkt.time= htonl (LPC_TMR32B0->TC);
-				dtnMsg.pkt.seq = htonl (g_sequence);
-				dtnMsg.pkt.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.pkt.crc)));
+				dtnMsg.msg.from = htons (tag_id);
+				dtnMsg.msg.prop = 1;
+				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
+				dtnMsg.msg.seq = htonl (g_sequence);
+				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
 
 				nRFAPI_SetRxMode(0);
