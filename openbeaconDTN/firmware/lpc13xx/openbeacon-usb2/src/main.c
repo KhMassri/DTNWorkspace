@@ -31,6 +31,7 @@
 #include "nRF_CMD.h"
 #include "xxtea.h"
 #include "openbeacon-proto.h"
+#include "dtn_queue.h"
 
 
 /* device UUID */
@@ -68,6 +69,10 @@ static const unsigned char broadcast_mac[NRF_MAX_MAC_SIZE] = {0xE7,0xD3,0xF0,0x3
 /* OpenBeacon packet */
 static DTNMsgEnvelope dtnMsg;
 static TLogfileDTNMsg g_Log;
+
+
+static QueueRecord sa;
+static QueueRecord *Q = &sa;
 
 
 static uint32_t
@@ -407,6 +412,11 @@ main (void)
 	uint8_t volatile *uart;
 	volatile int t;
 	uint8_t i,T,IRQ;
+
+	MakeEmpty(Q);
+	i=Q->Front;
+
+
 
 
 

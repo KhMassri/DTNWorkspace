@@ -23,6 +23,7 @@ APP_SRC= \
   src/storage.c \
   src/customIO.c \
   src/bluetooth.c \
+  src/dtn_queue.c \
   src/3d_acceleration.c
 
 APP_SRC+=$(IMAGES_C)
