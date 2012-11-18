@@ -42,7 +42,7 @@ static TDeviceUID device_uuid;
 static uint32_t random_seed;
 /* logfile position */
 static uint32_t g_storage_items;
-static uint32_t g_sequence;
+
 
 #define TX_STRENGTH_OFFSET 2
 
@@ -82,7 +82,7 @@ rnd (uint32_t range)
 	static uint32_t v2 = 0x6e28014a;
 
 	/* reseed random with timer */
-	random_seed += LPC_TMR32B0->TC ^ g_sequence;
+	random_seed += LPC_TMR32B0->TC ^ 10;
 
 	/* MWC generator, period length 1014595583 */
 	return ((((v1 = 36969 * (v1 & 0xffff) + (v1 >> 16)) << 16) ^
@@ -411,13 +411,11 @@ main (void)
 	uint8_t  status;
 	uint8_t volatile *uart;
 	volatile int t;
-	uint8_t i,T,IRQ;
+	uint8_t T,IRQ;
+	uint32_t i;
+	//uint8_t g_sequence = 0;
 
 	MakeEmpty(Q);
-	i=Q->Front;
-
-
-
 
 
 	/* wait on boot - debounce */
@@ -564,16 +562,51 @@ main (void)
 	blink (3);
 
 	/***************////****************MAIN TASK************/////**********************/
+	/***************////****************MAIN TASK************/////**********************/
+	/***************////****************MAIN TASK************/////**********************/
+
+
 
 
 	/* disable unused jobs */
 	SSPdiv = LPC_SYSCON->SSPCLKDIV;
 	i = 0;
-	g_sequence = 0;
+	DTNMsg msg;
+	DTNMsg* msgp;
 
+
+	/*
+	for(i=0;i<10;i++)
+	{
+
+		msg.from = htons (tag_id);
+		msg.proto = RFBPROTO_DTN_MSG;
+		msg.prop = 2;
+		msg.time= htonl (LPC_TMR32B0->TC);
+		msg.seq = htonl (i);
+		Enqueue(msg, Q);
+	}
+	 */
+
+	i = LPC_TMR32B0->TC;
 
 	while (1)
 	{
+		if(LPC_TMR32B0->TC - i >= 60)
+		{
+
+			msg.from = htons (tag_id);
+			msg.proto = RFBPROTO_DTN_MSG;
+			msg.prop = 2;
+			msg.time= htonl (LPC_TMR32B0->TC);
+			msg.seq = htonl (i);
+			Enqueue(msg, Q);
+			i = LPC_TMR32B0->TC;
+		}
+
+
+
+
 		nRFAPI_SetRxMode (1);
 		pmu_sleep_ms (2); // from pwr_down to stand_by state
 
@@ -618,14 +651,12 @@ main (void)
 					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 					nRFAPI_SetRxMode(0);
-					nRF_tx (3);
+					nRF_tx (1);
 
 					// ready 40 ms to receive DTNMsg, need to be modified for longer window
 					nRFAPI_SetRxMode (1);
 					nRFCMD_CE (1);
-					GPIOSetValue (1, 1, 1);
-					pmu_sleep_ms (100);
-					GPIOSetValue (1, 1, 0);
+					pmu_sleep_ms (40);
 					nRFCMD_CE (0);
 					/**** if there is incomming packet recieve it *******/
 
@@ -640,9 +671,7 @@ main (void)
 							if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_DTN_MSG)
 							{
 								GPIOSetValue (1, 2, 1);
-								// light LED for 2ms
-								pmu_sleep_ms (500);
-								// turn LED off
+								pmu_sleep_ms (100);//
 								GPIOSetValue (1, 2, 0);
 
 								g_Log.time = ntohl(dtnMsg.msg.time);
@@ -652,12 +681,9 @@ main (void)
 								g_Log.crc = crc8 (((uint8_t *) & g_Log),sizeof (g_Log) - sizeof (g_Log.crc));
 								// store data if space left on FLASH
 								if (g_storage_items < (LOGFILE_STORAGE_SIZE/sizeof (g_Log)))
-								{
-
-
-									storage_write (g_storage_items * sizeof (g_Log), sizeof (g_Log), &g_Log);
-									// increment and store RAM persistent storage position
-									g_storage_items ++;
+								{	storage_write (g_storage_items * sizeof (g_Log), sizeof (g_Log), &g_Log);
+								// increment and store RAM persistent storage position
+								g_storage_items ++;
 								}
 							}
 							// get status
@@ -666,30 +692,21 @@ main (void)
 						while ((status & FIFO_RX_EMPTY) == 0);
 					}
 				}
-
-
-
 			}
-
 
 			nRFCMD_CE (0);
 			nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
 			nRFAPI_FlushRX ();
 		}
 
-
-
 		/**********************************************************************/
-		else {   // sending RTS
-
-
-
+		else if (!IsEmpty(Q)) {   // if the queue is not empty sending RTS
 
 			nRFCMD_CE (1);
 			pmu_sleep_ms (2); //Carrier detect
 			nRFCMD_CE (0);
 
-			if ((nRFAPI_CarrierDetect () != 0x01) && (g_sequence < 10))
+			if ((nRFAPI_CarrierDetect () != 0x01))
 			{
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
@@ -698,20 +715,17 @@ main (void)
 				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 				nRFAPI_SetRxMode(0);
-				nRF_tx (3);
+				nRF_tx (1);
 
 				// ready 40 ms to receive DTNMsg, need to be modified for longer window
 				nRFAPI_SetRxMode (1);
 				nRFCMD_CE (1);
-				GPIOSetValue (1, 1, 1);
 				pmu_sleep_ms (40);
-				GPIOSetValue (1, 1, 0);
 				nRFCMD_CE (0);
-				/**** if there is incomming packet recieve it *******/
 
+				/**** if there is incomming packet recieve it *******/
 				if (nRFCMD_IRQ ())
 				{
-
 					nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
 					xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
 					crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
@@ -721,22 +735,25 @@ main (void)
 					{
 						//Send DTNMsg
 						bzero (&dtnMsg, sizeof (dtnMsg));
-						dtnMsg.msg.from = htons (tag_id);
-						dtnMsg.msg.proto = RFBPROTO_DTN_MSG;
-						dtnMsg.msg.prop = 5;
-						dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
-						dtnMsg.msg.seq = htonl (g_sequence);
+						SortQueue(Q);
+						msgp = Front(Q);
+						dtnMsg.msg = *msgp;
 						dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
-
 						nRFAPI_SetRxMode(0);
-						nRF_tx (3);
+						nRF_tx (1);
+
 						pmu_sleep_ms(5); //wait ack
 						//get FIFO status
 						if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
 						{
 							//if ACK from alarm_mac, disable alarm
-							g_sequence++;
+							//g_sequence++;
+
+							msgp->prop = msgp->prop -1;
+
+							if(msgp->prop == 0)
+								Dequeue(Q);
 						}
 						else
 						{
@@ -744,12 +761,8 @@ main (void)
 
 						}
 
-
-
 					}
 				}
-
-
 
 			}
 		}

@@ -31,6 +31,7 @@
 #include "nRF_CMD.h"
 #include "xxtea.h"
 #include "openbeacon-proto.h"
+#include "dtn_queue.h"
 
 
 /* device UUID */
@@ -41,7 +42,7 @@ static TDeviceUID device_uuid;
 static uint32_t random_seed;
 /* logfile position */
 static uint32_t g_storage_items;
-static uint32_t g_sequence;
+
 
 #define TX_STRENGTH_OFFSET 2
 
@@ -70,6 +71,10 @@ static DTNMsgEnvelope dtnMsg;
 static TLogfileDTNMsg g_Log;
 
 
+static QueueRecord sa;
+static QueueRecord *Q = &sa;
+
+
 static uint32_t
 rnd (uint32_t range)
 {
@@ -77,7 +82,7 @@ rnd (uint32_t range)
 	static uint32_t v2 = 0x6e28014a;
 
 	/* reseed random with timer */
-	random_seed += LPC_TMR32B0->TC ^ g_sequence;
+	random_seed += LPC_TMR32B0->TC ^ 10;
 
 	/* MWC generator, period length 1014595583 */
 	return ((((v1 = 36969 * (v1 & 0xffff) + (v1 >> 16)) << 16) ^
@@ -393,9 +398,10 @@ blink (uint8_t times)
 
 int
 /***************************************************************************/
-/*************************MAIN**********************************************/
+/*******************************MAIN****************************************/
 
 main (void)
+
 {
 
 
@@ -406,7 +412,9 @@ main (void)
 	uint8_t volatile *uart;
 	volatile int t;
 	uint8_t i,T,IRQ;
+	//uint8_t g_sequence = 0;
 
+	MakeEmpty(Q);
 
 
 	/* wait on boot - debounce */
@@ -553,12 +561,28 @@ main (void)
 	blink (3);
 
 	/***************////****************MAIN TASK************/////**********************/
+	/***************////****************MAIN TASK************/////**********************/
+	/***************////****************MAIN TASK************/////**********************/
+
+
 
 
 	/* disable unused jobs */
 	SSPdiv = LPC_SYSCON->SSPCLKDIV;
 	i = 0;
-	g_sequence = 0;
+	DTNMsg msg;
+	DTNMsg* msgp;
+
+	for(i=0;i<10;i++)
+	{
+
+		msg.from = htons (tag_id);
+		msg.proto = RFBPROTO_DTN_MSG;
+		msg.prop = 2;
+		msg.time= htonl (LPC_TMR32B0->TC);
+		msg.seq = htonl (i);
+		Enqueue(msg, Q);
+	}
 
 
 	while (1)
@@ -607,7 +631,7 @@ main (void)
 					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 					nRFAPI_SetRxMode(0);
-					nRF_tx (3);
+					nRF_tx (1);
 
 					// ready 40 ms to receive DTNMsg, need to be modified for longer window
 					nRFAPI_SetRxMode (1);
@@ -669,7 +693,13 @@ main (void)
 
 
 		/**********************************************************************/
-		else {   // sending RTS
+		else if (!IsEmpty(Q)) {   // if the queue is not empty sending RTS
+
+			GPIOSetValue (1, 1, 1);
+			// light LED for 2ms
+			pmu_sleep_ms (500);
+			// turn LED off
+			GPIOSetValue (1, 1, 0);
 
 
 
@@ -678,7 +708,7 @@ main (void)
 			pmu_sleep_ms (2); //Carrier detect
 			nRFCMD_CE (0);
 
-			if ((nRFAPI_CarrierDetect () != 0x01) && (g_sequence < 10))
+			if ((nRFAPI_CarrierDetect () != 0x01))
 			{
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
@@ -687,7 +717,7 @@ main (void)
 				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 				nRFAPI_SetRxMode(0);
-				nRF_tx (3);
+				nRF_tx (1);
 
 				// ready 40 ms to receive DTNMsg, need to be modified for longer window
 				nRFAPI_SetRxMode (1);
@@ -710,22 +740,25 @@ main (void)
 					{
 						//Send DTNMsg
 						bzero (&dtnMsg, sizeof (dtnMsg));
-						dtnMsg.msg.from = htons (tag_id);
-						dtnMsg.msg.proto = RFBPROTO_DTN_MSG;
-						dtnMsg.msg.prop = 5;
-						dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
-						dtnMsg.msg.seq = htonl (g_sequence);
+						SortQueue(Q);
+						msgp = Front(Q);
+						dtnMsg.msg = *msgp;
 						dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
 
 						nRFAPI_SetRxMode(0);
-						nRF_tx (3);
+						nRF_tx (1);
 						pmu_sleep_ms(5); //wait ack
 						//get FIFO status
 						if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
 						{
 							//if ACK from alarm_mac, disable alarm
-							g_sequence++;
+							//g_sequence++;
+
+							msgp->prop = msgp->prop -1;
+							if(msgp->prop == 0)
+								Dequeue(Q);
+
 						}
 						else
 						{

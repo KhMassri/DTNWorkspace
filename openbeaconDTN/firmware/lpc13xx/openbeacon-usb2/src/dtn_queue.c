@@ -3,7 +3,7 @@
 
 Written by: Khalil Massri
 DTN Implementation
-*/
+ */
 
 
 #include"dtn_queue.h"
@@ -11,96 +11,95 @@ DTN Implementation
 
 
 uint8_t IsEmpty(QueueRecord* Q) {
-  return Q->Size == 0;
+	return Q->Size == 0;
 }
 
 uint8_t IsFull(QueueRecord* Q) {
-  return Q->Size == CAPACITY;
+	return Q->Size == CAPACITY;
 }
 
 void MakeEmpty(QueueRecord* Q) {
 
-  Q->Size = 0;
-  Q->Front = 1;
-  Q->Rear = 0;
+	Q->Size = 0;
+	Q->Front = 1;
+	Q->Rear = 0;
 
 }
 
 // if you wanna make it static then capacity musbe be queue field and queue sent as para
 uint8_t Succ(uint8_t Value) {
-  if (++Value == CAPACITY) {
-    Value = 0;
-  }
-  return Value;
+	if (++Value == CAPACITY) {
+		Value = 0;
+	}
+	return Value;
 }
 
 void Enqueue(DTNMsg X, QueueRecord* Q) {
 
-  if (IsFull(Q)) {
-    return;
-  } else {
-    Q->Size++;
-    Q->Rear = Succ(Q->Rear);
-    Q->Array[Q->Rear] = X;
-  }
+	if (IsFull(Q)) {
+		return;
+	} else {
+		Q->Size++;
+		Q->Rear = Succ(Q->Rear);
+		Q->Array[Q->Rear] = X;
+	}
 
 }
 
 
-DTNMsg Front(QueueRecord* Q) {
-DTNMsg temp = {0,0,0,0,0,0,0};
-  if (!IsEmpty(Q)) {
-    return Q->Array[Q->Front];
-  }
-  
-  /* Return value to avoid warnings from the compiler */
-  return temp;
+DTNMsg* Front(QueueRecord* Q) {
 
+	return &(Q->Array[Q->Front]);
 }
+
+
+
 
 void Dequeue(QueueRecord* Q) {
 
-  if (IsEmpty(Q)) {
-    return;
-  } else {
-    Q->Size--;
-    Q->Front = Succ(Q->Front);
-  }
+	if (IsEmpty(Q)) {
+		return;
+	} else {
+		Q->Size--;
+		Q->Front = Succ(Q->Front);
+	}
 
 }
 
 DTNMsg FrontAndDequeue(QueueRecord* Q) {
 
-  DTNMsg temp = {0,0,0,0,0,0,0};
+	DTNMsg temp = {0,0,0,0,0,0,0};
 
-  if (IsEmpty(Q))
-    return temp;
+	if (IsEmpty(Q))
+		return temp;
 
-  else {
-    Q->Size--;
-    temp = Q->Array[Q->Front];
-    Q->Front = Succ(Q->Front);
-  }
-  return temp;
+	else {
+		Q->Size--;
+		temp = Q->Array[Q->Front];
+		Q->Front = Succ(Q->Front);
+	}
+	return temp;
 
 }
-
+/*
+ * Msg with least prob will be at Rear
+ * */
 void SortQueue(QueueRecord* Q){
-if(IsEmpty(Q))
-return;
-DTNMsg temp;
-uint8_t i,j;
+	if(IsEmpty(Q))
+		return;
+	DTNMsg temp;
+	uint8_t i,j;
 
-for(i=Q->Front;i!=Q->Rear;i=Succ(i))
-for(j=Succ(i); j!=Succ(Q->Rear) ;j=Succ(j))
-{
-if((Q->Array[j]).prop < (Q->Array[i]).prop)
-{temp = Q->Array[i];
-Q->Array[i]=Q->Array[j];
-Q->Array[j]=temp;
-}	
-			
-}
+	for(i=Q->Front;i!=Q->Rear;i=Succ(i))
+		for(j=Succ(i); j!=Succ(Q->Rear) ;j=Succ(j))
+		{
+			if((Q->Array[j]).prop > (Q->Array[i]).prop)
+			{temp = Q->Array[i];
+			Q->Array[i]=Q->Array[j];
+			Q->Array[j]=temp;
+			}
+
+		}
 
 }
 
