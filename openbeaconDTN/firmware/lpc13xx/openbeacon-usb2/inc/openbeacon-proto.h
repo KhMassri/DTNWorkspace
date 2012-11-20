@@ -147,6 +147,7 @@ typedef struct
 {
 	uint8_t proto;
 	uint32_t time, seq;
+	//unsigned char from[NRF_MAX_MAC_SIZE];
 	uint16_t from;
 	uint16_t info;
 	uint8_t temp;
@@ -157,9 +158,10 @@ typedef struct
 {
 	uint8_t proto;
 	uint32_t time, seq;
-	uint16_t from;
-	uint16_t info;
-	uint8_t temp;
+	unsigned char from[NRF_MAX_MAC_SIZE];
+	//uint16_t from;
+	//uint16_t info;
+	//uint8_t temp;
 	uint16_t crc;
 } PACKED CTS;
 
