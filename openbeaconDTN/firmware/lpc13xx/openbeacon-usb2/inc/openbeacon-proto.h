@@ -40,9 +40,9 @@
 #define RFBPROTO_PROXREPORT             69
 #define RFBPROTO_PROXREPORT_EXT         70
 /********************************************/
-#define RFBPROTO_PREAMBLE				100
-#define RFBPROTO_RTS					101
-#define RFBPROTO_CTS					102
+
+#define RFBPROTO_ND_REQ					101
+#define RFBPROTO_ND_RES					102
 #define RFBPROTO_DTN_MSG				103
 /********************************************/
 
@@ -152,7 +152,7 @@ typedef struct
 	uint16_t info;
 	uint8_t temp;
 	uint16_t crc;
-} PACKED RTS;
+} PACKED NDReq;
 
 typedef struct
 {
@@ -163,7 +163,7 @@ typedef struct
 	//uint16_t info;
 	//uint8_t temp;
 	uint16_t crc;
-} PACKED CTS;
+} PACKED NDRes;
 
 typedef struct
 {
@@ -180,8 +180,8 @@ typedef struct
 typedef union
 {
 	uint8_t proto;
-	RTS rts;
-	CTS cts;
+	NDReq NDreq;
+	NDRes NDres;
 	DTNMsg msg;
 	uint32_t block[XXTEA_BLOCK_COUNT];
 	uint8_t byte[XXTEA_BLOCK_COUNT * 4];

@@ -2,8 +2,8 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="312" key="DIALOG_WIDTH"/>
-		<item value="137" key="DIALOG_Y_ORIGIN"/>
-		<item value="913" key="DIALOG_X_ORIGIN"/>
+		<item value="192" key="DIALOG_Y_ORIGIN"/>
+		<item value="0" key="DIALOG_X_ORIGIN"/>
 		<item value="437" key="DIALOG_HEIGHT"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
@@ -13,18 +13,23 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="rnd" key="selection"/>
+		<item value="" key="selection"/>
 		<list key="findhistory">
+			<item value="UID"/>
+			<item value="TDeviceUID"/>
+			<item value="cts"/>
+			<item value="rts"/>
+			<item value="pressedCounter"/>
 			<item value="rnd"/>
 			<item value="g_sequence"/>
 			<item value="g_storage_items"/>
-			<item value="nRF_tx"/>
-			<item value="g_device_id"/>
-			<item value="prop"/>
-			<item value="oid"/>
-			<item value="pkt"/>
 		</list>
 		<list key="replacehistory">
+			<item value="ND_RES"/>
+			<item value="NDres"/>
+			<item value="NDRes"/>
+			<item value="ND_REQ"/>
+			<item value="NDReq"/>
 			<item value="NCBasedQMToSink"/>
 			<item value="FadToFadSink"/>
 		</list>

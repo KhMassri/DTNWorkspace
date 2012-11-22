@@ -616,13 +616,13 @@ main (void)
 
 		/**** if there is incomming packet recieve it *******/
 		if (IRQ)
-		{ // check wherther it is a RTS or not
+		{ // check wherther it is a NDReq or not
 			nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
 			xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
 			crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
-			if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_RTS)
+			if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_REQ)
 			{
-				// send CTS during CTS time Window 200
+				// send NDRes during NDRes time Window 200
 				uint8_t j = rnd(50);
 				pmu_sleep_ms (j);
 
@@ -636,9 +636,9 @@ main (void)
 					bzero (&dtnMsg, sizeof (dtnMsg));
 					//dtnMsg.msg.from = htons (tag_id);
 					for(t=0;t<5;t++)
-						dtnMsg.cts.from[t] = my_mac[t];
+						dtnMsg.NDres.from[t] = my_mac[t];
 
-					dtnMsg.proto = RFBPROTO_CTS;
+					dtnMsg.proto = RFBPROTO_ND_RES;
 					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 					nRFAPI_SetRxMode(0);
@@ -704,7 +704,7 @@ main (void)
 		}
 
 		/**********************************************************************/
-		else if (!IsEmpty(Q)) {   // if the queue is not empty sending RTS
+		else if (!IsEmpty(Q)) {   // if the queue is not empty sending NDReq
 
 			nRFCMD_CE (1);
 			pmu_sleep_ms (2); //Carrier detect
@@ -715,7 +715,7 @@ main (void)
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
 				dtnMsg.msg.from = htons (tag_id);
-				dtnMsg.proto = RFBPROTO_RTS;
+				dtnMsg.proto = RFBPROTO_ND_REQ;
 				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 				nRFAPI_SetRxMode(0);
@@ -727,7 +727,7 @@ main (void)
 				// ready 40 ms to receive DTNMsg, need to be modified for longer window
 				nRFAPI_SetRxMode (1);
 				nRFCMD_CE (1);
-				pmu_sleep_ms (100); //incomming CTS time window
+				pmu_sleep_ms (100); //incomming ND_RES time window
 				nRFCMD_CE (0);
 
 				GPIOSetValue (1, 1, 0);
@@ -739,12 +739,12 @@ main (void)
 					xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
 					crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
 
-					// if it is valid CTS msg then send DTNMsg
-					if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_CTS)
+					// if it is valid ND_RES msg then send DTNMsg
+					if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_RES)
 					{
 						//Send DTNMsg
-						nRFAPI_SetTxMAC (dtnMsg.cts.from,sizeof(my_mac));
-						nRFAPI_SetRxMAC (dtnMsg.cts.from,sizeof(my_mac),0);
+						nRFAPI_SetTxMAC (dtnMsg.NDres.from,sizeof(my_mac));
+						nRFAPI_SetRxMAC (dtnMsg.NDres.from,sizeof(my_mac),0);
 
 						bzero (&dtnMsg, sizeof (dtnMsg));
 
