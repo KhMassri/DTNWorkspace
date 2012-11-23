@@ -570,8 +570,8 @@ main (void)
 	//nRFAPI_TxRetries (0);
 	/* enable ACK */
 	//nRFAPI_SetPipeSizeRX (0, NRF_MAX_MAC_SIZE);
-	nRFAPI_PipesEnable (ERX_P0);
-	nRFAPI_PipesAck (ERX_P0);
+	//nRFAPI_PipesEnable (ERX_P0);
+	//nRFAPI_PipesAck (ERX_P0);
 
 	/* blink three times to show flash initialized RF interface */
 	blink (3);
@@ -596,7 +596,7 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		if(LPC_TMR32B0->TC - time >= 5000)
+		if(LPC_TMR32B0->TC - time >= 5)
 		{
 
 			msg.from = htons (tag_id);
@@ -630,7 +630,7 @@ main (void)
 				uint8_t done = 0;
 				do
 				{
-					pmu_sleep_ms (10+rnd(30));
+					pmu_sleep_ms (10+rnd(40));
 					j++;
 					nRFAPI_SetRxMode(1);
 					nRFCMD_CE (1);
@@ -640,9 +640,7 @@ main (void)
 						done = 1;
 						break;
 					}
-
-				}while(j<5);
-
+				}while(j<4);//[j]*50<Window
 
 				if (done)
 				{
@@ -654,24 +652,23 @@ main (void)
 					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 					nRFAPI_SetRxMode(0);
-					nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
+					//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 					nRF_tx (1);
 
-
 					GPIOSetValue (1, 1, 1);
-					pmu_sleep_ms (170 - j*30);
+					pmu_sleep_ms (150 - j*40);
 
 					// switch to my_mac for unicast receiving......
-				//-->nRFAPI_SetRxMAC (my_mac,sizeof(my_mac), 0);
+					//-->nRFAPI_SetRxMAC (my_mac,sizeof(my_mac), 0);
 
 					nRFAPI_SetRxMode (1);
 					nRFCMD_CE (1);
-					pmu_sleep_ms (100);//
+					pmu_sleep_ms (300);//
 					nRFCMD_CE (0);
 
 					GPIOSetValue (1, 1, 0);
 
-				//-->nRFAPI_SetRxMAC (broadcast_mac,sizeof(broadcast_mac), 0);
+					//-->nRFAPI_SetRxMAC (broadcast_mac,sizeof(broadcast_mac), 0);
 
 
 
@@ -733,7 +730,7 @@ main (void)
 				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 				nRFAPI_SetRxMode(0);
-				nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
+				//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 				nRF_tx (1);  // Sending NDReq
 
 				GPIOSetValue (1, 1, 1);
@@ -742,7 +739,7 @@ main (void)
 
 				nRFAPI_SetRxMode (1);
 				nRFCMD_CE (1);
-				pmu_sleep_ms (40); //150 incomming NDRes time window + 50 gap
+				pmu_sleep_ms (200); //incomming NDRes time window, must be long to accept first at least
 				nRFCMD_CE (0);
 
 				pmu_sleep_ms (200);
@@ -760,8 +757,8 @@ main (void)
 					{
 						//Send DTNMsg
 						// switch to unicast address
-					//--nRFAPI_SetTxMAC (dtnMsg.NDres.from,sizeof(my_mac));
-					//--nRFAPI_SetRxMAC (dtnMsg.NDres.from,sizeof(my_mac),0);
+						//--nRFAPI_SetTxMAC (dtnMsg.NDres.from,sizeof(my_mac));
+						//--nRFAPI_SetRxMAC (dtnMsg.NDres.from,sizeof(my_mac),0);
 
 						bzero (&dtnMsg, sizeof (dtnMsg));
 
@@ -771,27 +768,28 @@ main (void)
 						dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
 						nRFAPI_SetRxMode(0);
+						//nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 						nRF_tx (1);
 
-					//--nRFAPI_SetTxMAC (broadcast_mac,sizeof(my_mac));
-					//--nRFAPI_SetRxMAC (broadcast_mac,sizeof(my_mac),0);
+						//--nRFAPI_SetTxMAC (broadcast_mac,sizeof(my_mac));
+						//--nRFAPI_SetRxMAC (broadcast_mac,sizeof(my_mac),0);
 
 						//get FIFO status
-						if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
-						{
-							//if ACK from alarm_mac, disable alarm
-							//g_sequence++;
+						//	if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
+						//{
+						//if ACK from alarm_mac, disable alarm
+						//g_sequence++;
 
-							msgp->prop = msgp->prop -1;
+						msgp->prop = msgp->prop -1;
 
-							if(msgp->prop == 0)
-								Dequeue(Q);
-						}
-						else
-						{
-							nRFAPI_FlushTX ();
+						if(msgp->prop == 0)
+							Dequeue(Q);
+						//}
+						//else
+						//{
+						nRFAPI_FlushTX ();
 
-						}
+						//}
 
 					}
 				}

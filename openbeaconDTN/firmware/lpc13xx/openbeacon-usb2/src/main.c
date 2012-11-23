@@ -406,10 +406,10 @@ inline void checkSleepForever(void){
 
 	uint8_t t = 0;
 	GPIOSetValue (1, 2, 1); //right LED
-	while(!GPIOGetValue (1, 4) && ++t < 50)
+	while(!GPIOGetValue (1, 4) && ++t < 30)
 		pmu_sleep_ms (100);
 
-	if (t >= 50)
+	if (t >= 30)
 	{
 		GPIOSetValue (1, 2, 0);
 		GPIOSetValue (1, 1, 0);
@@ -596,7 +596,7 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		if(LPC_TMR32B0->TC - time >= 5)
+		if(LPC_TMR32B0->TC - time >= 3)
 		{
 
 			msg.from = htons (tag_id);
@@ -626,21 +626,21 @@ main (void)
 			if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_REQ)
 			{
 				// send NDRes during NDRes time Window 200
-				uint8_t j = 0;
+				uint8_t j = 40;
 				uint8_t done = 0;
 				do
 				{
-					pmu_sleep_ms (10+rnd(40));
-					j++;
+					//pmu_sleep_ms (10+rnd(j));
 					nRFAPI_SetRxMode(1);
 					nRFCMD_CE (1);
-					pmu_sleep_ms (2); //Carrier detect
+					pmu_sleep_ms (rnd(j)); //Carrier detect
 					nRFCMD_CE (0);
 					if((nRFAPI_CarrierDetect () != 0x01)){
 						done = 1;
 						break;
 					}
-				}while(j<4);//[j]*50<Window
+					j=j+40;
+				}while(j<200);//[j]*50<Window
 
 				if (done)
 				{
@@ -652,26 +652,21 @@ main (void)
 					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 					nRFAPI_SetRxMode(0);
-				//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
+					//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 					nRF_tx (1);
 
 					GPIOSetValue (1, 1, 1);
-					pmu_sleep_ms (150 - j*40);
+					pmu_sleep_ms (200-j);
 
 					// switch to my_mac for unicast receiving......
-				//-->nRFAPI_SetRxMAC (my_mac,sizeof(my_mac), 0);
+					//-->nRFAPI_SetRxMAC (my_mac,sizeof(my_mac), 0);
 
 					nRFAPI_SetRxMode (1);
 					nRFCMD_CE (1);
-					pmu_sleep_ms (300);//
+					pmu_sleep_ms (400);//
 					nRFCMD_CE (0);
 
 					GPIOSetValue (1, 1, 0);
-
-				//-->nRFAPI_SetRxMAC (broadcast_mac,sizeof(broadcast_mac), 0);
-
-
-
 
 					/**** if there is incomming packet recieve it *******/
 
@@ -685,9 +680,6 @@ main (void)
 							crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
 							if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_DTN_MSG)
 							{
-								//GPIOSetValue (1, 2, 1);
-								//pmu_sleep_ms (100);//
-								//GPIOSetValue (1, 2, 0);
 
 								g_Log.time = ntohl(dtnMsg.msg.time);
 								g_Log.seq = ntohl(dtnMsg.msg.seq);
@@ -730,68 +722,77 @@ main (void)
 				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
 				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 				nRFAPI_SetRxMode(0);
-			//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
+				//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 				nRF_tx (1);  // Sending NDReq
 
+				//collecting neighbors
+
 				GPIOSetValue (1, 1, 1);
+				uint8_t N = 0,added;
+				uint16_t w=0;
+				unsigned char Nei[10][5];
 
-				// ready to receive NDRes, need to be modified for longer managing received NDRes
 
-				nRFAPI_SetRxMode (1);
-				nRFCMD_CE (1);
-				pmu_sleep_ms (200); //incomming NDRes time window, must be long to accept first at least
-				nRFCMD_CE (0);
+				do{
 
-				pmu_sleep_ms (200);
+					nRFAPI_SetRxMode (1);
+					nRFCMD_CE (1);
+					pmu_sleep_ms (100); //incomming NDRes time window, must be long to accept first at least
+					nRFCMD_CE (0);
+
+					/**** if there is incomming packet recieve it *******/
+					if (nRFCMD_IRQ ())
+					{
+						do
+						{
+							added = 0;
+							nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
+							xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
+							crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
+							if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_RES)
+							{
+								//update neighbor
+								for(t=0;t<N;t++)
+									if(Nei[t][0] == dtnMsg.NDres.from[0] && Nei[t][1] == dtnMsg.NDres.from[1] && Nei[t][2] == dtnMsg.NDres.from[2] && Nei[t][3] == dtnMsg.NDres.from[3] && Nei[t][4] == dtnMsg.NDres.from[4])
+										added = 1;
+								if(!added)
+								{
+									for(t=0;t<5;t++)
+										Nei[N][t] = dtnMsg.NDres.from[t];
+									N++;
+								}
+							}
+							status = nRFAPI_GetFifoStatus ();
+						}while ((status & FIFO_RX_EMPTY) == 0);
+						nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
+					}
+
+				}
+				while(++w<=5);
+
 				GPIOSetValue (1, 1, 0);
 
-				/**** if there is incomming packet recieve it *******/
-				if (nRFCMD_IRQ ())
+
+				if(N)
 				{
-					nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
-					xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
-					crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
 
-					// if it is valid NDRes msg then send DTNMsg
-					if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_RES)
-					{
-						//Send DTNMsg
-						// switch to unicast address
-					//--nRFAPI_SetTxMAC (dtnMsg.NDres.from,sizeof(my_mac));
-					//--nRFAPI_SetRxMAC (dtnMsg.NDres.from,sizeof(my_mac),0);
+					//pmu_sleep_ms (100);
+					//sending DTNMsg
+					bzero (&dtnMsg, sizeof (dtnMsg));
+					SortQueue(Q);
+					msgp = Front(Q);
+					dtnMsg.msg = *msgp;
+					//for test
+					dtnMsg.msg.prop = N;
+					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
-						bzero (&dtnMsg, sizeof (dtnMsg));
 
-						SortQueue(Q);
-						msgp = Front(Q);
-						dtnMsg.msg = *msgp;
-						dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
-
-						nRFAPI_SetRxMode(0);
-						//nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
-						nRF_tx (1);
-
-					//--nRFAPI_SetTxMAC (broadcast_mac,sizeof(my_mac));
-					//--nRFAPI_SetRxMAC (broadcast_mac,sizeof(my_mac),0);
-
-						//get FIFO status
-					//	if (nRFAPI_GetFifoStatus () & FIFO_TX_EMPTY)
-						//{
-							//if ACK from alarm_mac, disable alarm
-							//g_sequence++;
-
-							msgp->prop = msgp->prop -1;
-
-							if(msgp->prop == 0)
-								Dequeue(Q);
-						//}
-						//else
-						//{
-							nRFAPI_FlushTX ();
-
-						//}
-
-					}
+					nRFAPI_SetRxMode(0);
+					nRF_tx (1);
+					//modify Msg properity
+					msgp->prop = msgp->prop -1;
+					if(msgp->prop == 0)
+						Dequeue(Q);
 				}
 
 			}
@@ -802,8 +803,6 @@ main (void)
 		nRFAPI_FlushRX ();
 		nRFAPI_PowerDown ();
 	}
-
-
 
 	return 0;
 }
