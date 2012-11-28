@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench progressCount="17" version="2.0">
 <workbenchAdvisor/>
-<window height="744" maximized="true" width="458" x="1571" y="44">
+<window height="744" maximized="true" width="458" x="0" y="0">
 <fastViewData fastViewLocation="1024">
 <orientation position="512" view="org.eclipse.ui.navigator.ProjectExplorer"/>
 </fastViewData>
@@ -22,7 +22,7 @@
 <coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="76" y="30"/>
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="76" y="30"/>
 <coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="171" y="30"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="96" y="30"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="184" y="30"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
@@ -43,17 +43,18 @@
 <part id="5"/>
 <part id="6"/>
 <part id="7"/>
+<part id="8"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/main.c" title="main.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="13156" selectionTopPixel="9995"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="13422" selectionTopPixel="9890"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="openbeacon-proto.h" partName="openbeacon-proto.h" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/openbeacon-proto.h" title="openbeacon-proto.h" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/openbeacon-proto.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/openbeacon-proto.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2075" selectionTopPixel="1147"/>
+<editorState selectionHorizontalPixel="0" selectionLength="5" selectionOffset="4282" selectionTopPixel="2517"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="dtn_queue.c" partName="dtn_queue.c" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/dtn_queue.c" title="dtn_queue.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/dtn_queue.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/dtn_queue.c"/>
@@ -61,15 +62,15 @@
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="dtn_queue.h" partName="dtn_queue.h" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/dtn_queue.h" title="dtn_queue.h" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/dtn_queue.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/dtn_queue.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="515" selectionTopPixel="156"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="515" selectionTopPixel="0"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="storage.c" partName="storage.c" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/storage.c" title="storage.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/storage.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/storage.c"/>
-<editorState selectionHorizontalPixel="65" selectionLength="0" selectionOffset="4015" selectionTopPixel="2924"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4099" selectionTopPixel="2924"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="mainQueueUnicast.c" partName="mainQueueUnicast.c" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainQueueUnicast.c" title="mainQueueUnicast.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainQueueUnicast.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainQueueUnicast.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="6" selectionOffset="14355" selectionTopPixel="10991"/>
+<editorState selectionHorizontalPixel="0" selectionLength="103" selectionOffset="17931" selectionTopPixel="12508"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="nRF_HW.h" partName="nRF_HW.h" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/nRF_HW.h" title="nRF_HW.h" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/nRF_HW.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/nRF_HW.h"/>
@@ -77,7 +78,11 @@
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="mainConntension.c" partName="mainConntension.c" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainConntension.c" title="mainConntension.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainConntension.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainConntension.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="18814" selectionTopPixel="13165"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="18814" selectionTopPixel="10999"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="mainContention2.c" partName="mainContention2.c" path="/home/massri/ONESimulator/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainContention2.c" title="mainContention2.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainContention2.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainContention2.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="18947" selectionTopPixel="13015"/>
 </editor>
 </editors>
 <views>
@@ -117,10 +122,9 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
-<category IMemento.internal.id="Warnings"/>
 <category IMemento.internal.id="Errors"/>
 </expanded>
-<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="567" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
+<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="938" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -384,6 +388,11 @@
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <fastViewBars>
+<fastViewBar fastViewLocation="131072" id="topRight" orientation="512" selectedTabId="org.eclipse.ui.views.ContentOutline" style="1">
+<fastViews>
+<view id="org.eclipse.ui.views.ContentOutline" ratio="0.3"/>
+</fastViews>
+</fastViewBar>
 <fastViewBar fastViewLocation="16384" id="topLeft" orientation="512" selectedTabId="org.eclipse.ui.navigator.ProjectExplorer" style="1">
 <fastViews>
 <view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.3"/>
@@ -417,7 +426,7 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.22245322" ratioLeft="214" ratioRight="748" relationship="2" relative="topLeft"/>
-<info folder="true" part="bottom" ratio="0.78955954" ratioLeft="484" ratioRight="129" relationship="4" relative="org.eclipse.ui.editorss">
+<info folder="true" part="bottom" ratio="0.8157068" ratioLeft="779" ratioRight="176" relationship="4" relative="org.eclipse.ui.editorss">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.TaskList" label="LabelNotFound"/>
@@ -426,7 +435,7 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="topRight" ratio="0.7496424" ratioLeft="524" ratioRight="175" relationship="2" relative="org.eclipse.ui.editorss">
+<info folder="true" part="topRight" ratio="0.7909811" ratioLeft="1298" ratioRight="343" relationship="2" relative="org.eclipse.ui.editorss">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.make.ui.views.MakeView" label="LabelNotFound"/>
@@ -541,137 +550,16 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/openbeacon-proto.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/nRF_API.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/hid.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/vfs.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/hid-client/rawhid.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/3d_acceleration.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/config.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/customIO.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/pmu.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/storage.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainmain.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainConntension.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-sensor/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainConntension.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/openbeacon.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/storage.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainConntension.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainContention2.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainQueueUnicast.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/openbeacon-proto.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/dtn_queue.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/storage.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/inc/nRF_HW.h"/>
 </editors>
-<item historyLabel="vfs.h" index="4">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="rawhid.h" index="5">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="3d_acceleration.h" index="6">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="config.h" index="7">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="customIO.h" index="8">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="nRF_API.h" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="pmu.h" index="9">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="storage.h" index="10">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="openbeacon-proto.h" index="1">
-<position info="not_deleted" x="2075" y="0"/>
-</item>
-<item historyLabel="pmu.h" index="9">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="openbeacon-proto.h" index="1">
-<position info="not_deleted" x="2075" y="0"/>
-</item>
-<item historyLabel="hid.h" index="3">
-<position info="not_deleted" x="967" y="0"/>
-</item>
-<item historyLabel="openbeacon-proto.h" index="1">
-<position info="not_deleted" x="2075" y="0"/>
-</item>
-<item historyLabel="storage.h" index="10">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="openbeacon-proto.h" index="1">
-<position info="not_deleted" x="2075" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1206" y="10"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="10113" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="14499" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="17257" y="0"/>
-</item>
-<item historyLabel="mainmain.c" index="11">
-<position info="not_deleted" x="2664" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="17257" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="13251" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="13237" y="2"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="0" y="18811"/>
-</item>
-<item historyLabel="mainConntension.c" index="12">
-<position info="not_deleted" x="18710" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="13239" y="0"/>
-</item>
-<item historyLabel="mainConntension.c" index="12">
-<position info="not_deleted" x="18710" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="12478" y="0"/>
-</item>
-<item historyLabel="main.c" index="13">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="12478" y="0"/>
-</item>
-<item historyLabel="mainConntension.c" index="14">
-<position info="not_deleted" x="18814" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="17631" y="0"/>
-</item>
-<item historyLabel="mainConntension.c" index="14">
-<position info="not_deleted" x="18814" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="0" y="18322"/>
-</item>
-<item historyLabel="mainConntension.c" index="14">
-<position info="not_deleted" x="18814" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="17784" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="16958" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="17591" y="0"/>
-</item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="17742" y="0"/>
 </item>
@@ -684,13 +572,13 @@
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="16961" y="0"/>
 </item>
-<item historyLabel="openbeacon.h" index="15">
+<item historyLabel="openbeacon.h" index="1">
 <position info="not_deleted" x="0" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
 <position/>
 </item>
-<item historyLabel="storage.c" index="16">
+<item historyLabel="storage.c" index="2">
 <position info="not_deleted" x="4015" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
@@ -705,8 +593,122 @@
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="17858" y="0"/>
 </item>
-<item active="true" historyLabel="main.c" index="0">
+<item historyLabel="main.c" index="0">
 <position info="not_deleted" x="14188" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="14301" y="0"/>
+</item>
+<item historyLabel="mainConntension.c" index="3">
+<position info="not_deleted" x="18814" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15733" y="0"/>
+</item>
+<item historyLabel="mainContention2.c" index="4">
+<position info="not_deleted" x="18947" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15733" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="17593" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="10205" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="17593" y="0"/>
+</item>
+<item historyLabel="mainConntension.c" index="3">
+<position info="not_deleted" x="18814" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="14728" y="43"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15060" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="14905" y="57"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15323" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="17561" y="111"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="18865" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="17931" y="103"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="18865" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="2589" y="6"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="openbeacon-proto.h" index="6">
+<position info="not_deleted" x="2075" y="0"/>
+</item>
+<item historyLabel="openbeacon-proto.h" index="6">
+<position info="not_deleted" x="2656" y="6"/>
+</item>
+<item historyLabel="openbeacon-proto.h" index="6">
+<position info="not_deleted" x="3038" y="6"/>
+</item>
+<item historyLabel="openbeacon-proto.h" index="6">
+<position info="not_deleted" x="3105" y="20"/>
+</item>
+<item historyLabel="dtn_queue.h" index="7">
+<position info="not_deleted" x="515" y="0"/>
+</item>
+<item historyLabel="storage.c" index="8">
+<position info="not_deleted" x="4015" y="0"/>
+</item>
+<item historyLabel="mainQueueUnicast.c" index="5">
+<position info="not_deleted" x="17931" y="103"/>
+</item>
+<item historyLabel="nRF_HW.h" index="9">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="mainConntension.c" index="3">
+<position info="not_deleted" x="18814" y="0"/>
+</item>
+<item historyLabel="mainContention2.c" index="4">
+<position info="not_deleted" x="18947" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15795" y="0"/>
+</item>
+<item historyLabel="storage.c" index="8">
+<position info="not_deleted" x="4099" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15795" y="0"/>
+</item>
+<item historyLabel="openbeacon-proto.h" index="6">
+<position info="not_deleted" x="4298" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15795" y="0"/>
+</item>
+<item historyLabel="openbeacon-proto.h" index="6">
+<position info="not_deleted" x="4282" y="5"/>
+</item>
+<item active="true" historyLabel="main.c" index="0">
+<position info="not_deleted" x="15795" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -716,6 +718,9 @@
 <trimLayout>
 <trimArea IMemento.internal.id="16384">
 <trimItem IMemento.internal.id="topLeft"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="topRight"/>
 </trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
@@ -729,6 +734,9 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="mainContention2.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainContention2.c">
+<persistable path="/openbeaconDTN/firmware/lpc13xx/openbeacon-usb2/src/mainContention2.c"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="openbeaconDTN/firmware/lpc13xx/openbeacon-sensor/src/main.c">
 <persistable path="/openbeaconDTN/firmware/lpc13xx/openbeacon-sensor/src/main.c"/>
 </file>
@@ -770,9 +778,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="hid.h" tooltip="openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/hid.h">
 <persistable path="/openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/hid.h"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="rfid.h" tooltip="openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/rfid.h">
-<persistable path="/openbeaconDTN/firmware/lpc13xx/core/openbeacon/inc/rfid.h"/>
 </file>
 </mruList>
 </workbench>

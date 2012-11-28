@@ -184,9 +184,9 @@ storage_logtxt_fmt (char* buffer, uint32_t index)
 
 
       if(msg.from>9999)
-	cIO_snprintf(buffer, LOGTXT_ENTRY_SIZE, "P%04X,%07u,%07u,P%04X,%04u\n",g_device_id,msg.time,msg.seq,msg.from,prop);
+	cIO_snprintf(buffer, LOGTXT_ENTRY_SIZE, "P%04X,%07u,%08X,P%04X,%03u\n",g_device_id,msg.time,msg.seq,msg.from,prop);
       else
-	cIO_snprintf(buffer, LOGTXT_ENTRY_SIZE, "P%04X,%07u,%07u,T%04X,%04u\n",g_device_id,msg.time,msg.seq,msg.from,prop);
+	cIO_snprintf(buffer, LOGTXT_ENTRY_SIZE, "P%04X,%07u,%08X,T%04X,%03u\n",g_device_id,msg.time,msg.seq,msg.from,prop);
     }
     else
     {
