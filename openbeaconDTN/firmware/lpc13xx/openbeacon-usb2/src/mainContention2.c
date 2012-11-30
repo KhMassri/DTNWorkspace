@@ -36,6 +36,7 @@
 
 /* device UUID */
 static uint16_t tag_id;
+static const uint16_t sink = 0x1fbf;
 
 static TDeviceUID device_uuid;
 /* random seed */
@@ -69,7 +70,8 @@ static unsigned char my_mac[NRF_MAX_MAC_SIZE] = {0xAA,0xD3,0xF0,0x35,0xAA};
 
 /* OpenBeacon packet */
 static DTNMsgEnvelope dtnMsg;
-static uint32_t MsgSeq = 0;
+static uint16_t MsgSeq = 0;
+static uint32_t rs = 0;
 static TLogfileDTNMsg g_Log;
 
 
@@ -84,7 +86,7 @@ rnd (uint32_t range)
 	static uint32_t v2 = 0x6e28014a;
 
 	/* reseed random with timer */
-	random_seed += LPC_TMR32B0->TC ^ MsgSeq;
+	random_seed += LPC_TMR32B0->TC ^ rs++;
 
 	/* MWC generator, period length 1014595583 */
 	return ((((v1 = 36969 * (v1 & 0xffff) + (v1 >> 16)) << 16) ^
@@ -596,14 +598,14 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		if(LPC_TMR32B0->TC - time >= 3000)
+		if(LPC_TMR32B0->TC - time >= 3)
 		{
 
 			msg.from = htons (tag_id);
 			msg.proto = RFBPROTO_DTN_MSG;
 			msg.prop = 1;
 			msg.time= htonl (LPC_TMR32B0->TC);
-			msg.seq = htonl (MsgSeq++);
+			msg.seq = htonl(((0x00000000 | tag_id)<<16) | MsgSeq++); //Msg Id is tagId:MsgSeq
 			Enqueue(msg, Q);
 			time = LPC_TMR32B0->TC;
 		}
@@ -631,7 +633,7 @@ main (void)
 				GPIOSetValue (1, 1, 1);
 				do
 				{
-					r = 10+rnd(40);//was 20
+					r = 10+rnd(20);//was 20
 					pmu_sleep_ms (r);
 					s = s+r;
 					nRFAPI_SetRxMode(1);
@@ -644,7 +646,7 @@ main (void)
 					}
 					s=s+10;
 					//j=j+40;
-				}while(s<800-60); //was 40
+				}while(s<500-40); //was 40
 
 				if (done)
 				{
@@ -652,16 +654,16 @@ main (void)
 					for(t=0;t<5;t++)
 						dtnMsg.NDres.from[t] = my_mac[t];
 					dtnMsg.proto = RFBPROTO_ND_RES;
-					dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
-					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
+					dtnMsg.NDres.time= htonl (LPC_TMR32B0->TC);
+					dtnMsg.NDres.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.NDres.crc)));
 					nRFAPI_SetRxMode(0);
 					//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 					nRF_tx (1);
-					pmu_sleep_ms (800-s);
+					pmu_sleep_ms (500-s);
 					GPIOSetValue (1, 1, 0);
 
 					// switch to my_mac for unicast receiving......
-					//-->nRFAPI_SetRxMAC (my_mac,sizeof(my_mac), 0);
+					//nRFAPI_SetRxMAC (my_mac,sizeof(my_mac), 0);
 
 					GPIOSetValue (1, 2, 1);
 					nRFAPI_SetRxMode (1);
@@ -670,6 +672,8 @@ main (void)
 					nRFCMD_CE (0);
 
 					GPIOSetValue (1, 2, 0);
+
+					//nRFAPI_SetRxMAC (broadcast_mac,sizeof(broadcast_mac), 0);
 
 					/**** if there is incomming packet recieve it *******/
 
@@ -724,8 +728,8 @@ main (void)
 				bzero (&dtnMsg, sizeof (dtnMsg));
 				dtnMsg.msg.from = htons (tag_id);
 				dtnMsg.proto = RFBPROTO_ND_REQ;
-				dtnMsg.msg.time= htonl (LPC_TMR32B0->TC);
-				dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
+				dtnMsg.NDreq.time= htonl (LPC_TMR32B0->TC);
+				dtnMsg.NDreq.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.NDreq.crc)));
 				nRFAPI_SetRxMode(0);
 				//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 				nRF_tx (1);  // Sending NDReq
@@ -769,7 +773,7 @@ main (void)
 					}
 
 				}
-				while(++w<=80);
+				while(++w<=50);
 				GPIOSetValue (1, 1, 0);
 
 				if(N)
@@ -787,8 +791,11 @@ main (void)
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
 
-					nRFAPI_SetRxMode(0);
-					nRF_tx (1);
+						nRFAPI_SetRxMode(0);
+						nRF_tx (1);
+
+
+
 					//modify Msg properity
 					msgp->prop = msgp->prop -1;
 					if(msgp->prop == 0)

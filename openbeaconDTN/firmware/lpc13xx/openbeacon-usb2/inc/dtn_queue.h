@@ -34,5 +34,6 @@ extern DTNMsg* Front(QueueRecord* Q);
 extern void Dequeue(QueueRecord* Q);
 extern DTNMsg FrontAndDequeue(QueueRecord* Q);
 extern void SortQueue(QueueRecord* Q);
+extern uint8_t Contains(QueueRecord* Q, uint32_t Id);
 
 #endif/*__DTN_QUEUE_H__*/

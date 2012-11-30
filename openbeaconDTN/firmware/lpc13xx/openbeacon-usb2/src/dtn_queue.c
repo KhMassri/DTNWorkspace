@@ -103,5 +103,17 @@ void SortQueue(QueueRecord* Q){
 
 }
 
+uint8_t Contains(QueueRecord* Q, uint32_t Id){
+	if(IsEmpty(Q))
+		return 0;
+	uint8_t i;
+	for(i=Q->Front;i!=Q->Rear;i=Succ(i))
+			if((Q->Array[i]).seq == Id)
+			return 1;
+	return 0;
+
+
+}
+
 
 
