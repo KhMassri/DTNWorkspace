@@ -599,18 +599,18 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		//if(LPC_TMR32B0->TC - time >= 3)
-		if(!onemsg)
+		//if(LPC_TMR32B0->TC - time >= 10)
+		if(onemsg<2)
 		{
 
 			msg.from = htons (tag_id);
 			msg.proto = RFBPROTO_DTN_MSG;
 			msg.prop = 1;
 			msg.time= htonl (LPC_TMR32B0->TC);
-			msg.seq = htonl(((0x00000000 | tag_id)<<16) | MsgSeq++); //Msg Id is tagId:MsgSeq
+			msg.seq = htonl(((0x00000000 | tag_id)<<16) | ++MsgSeq); //Msg Id is tagId:MsgSeq
 			Enqueue(msg, Q);
 			time = LPC_TMR32B0->TC;
-			onemsg = 1;
+			onemsg++;
 		}
 
 		/* Contention phase*/
@@ -630,7 +630,7 @@ main (void)
 			crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
 			if (ntohs(dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_REQ)
 			{
-				//if(!Contains(Q,dtnMsg.NDreq.seq) )
+				if(!Contains(Q,dtnMsg.NDreq.seq) )
 				{
 					// send NDRes during NDRes time Window 200
 					uint16_t s=0,r;
@@ -645,7 +645,7 @@ main (void)
 						nRFCMD_CE (1);
 						pmu_sleep_ms (2); //Carrier detect
 						nRFCMD_CE (0);
-						if((nRFAPI_CarrierDetect () != 0x01) && rnd(10)<=1){
+						if((nRFAPI_CarrierDetect () != 0x01) && rnd(10)<=3){
 							done = 1;
 							break;
 						}
@@ -690,8 +690,10 @@ main (void)
 								nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
 								xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
 								crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
+
 								if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_DTN_MSG)
-									if(!Contains(Q,dtnMsg.msg.seq) )
+								{
+									if(Contains(Q,dtnMsg.msg.seq)==0)
 									{
 
 										Enqueue(dtnMsg.msg,Q);
@@ -707,6 +709,7 @@ main (void)
 										g_storage_items ++;
 										}
 									}
+								}
 								// get status
 								status = nRFAPI_GetFifoStatus ();
 							}
@@ -716,8 +719,8 @@ main (void)
 					GPIOSetValue (1, 1, 0);
 				}
 
-				//else
-				//pmu_sleep_ms (700);
+				else
+				pmu_sleep_ms (500);
 			}
 
 			nRFCMD_CE (0);
@@ -730,15 +733,16 @@ main (void)
 
 			nRFCMD_CE (1);
 			pmu_sleep_ms (2); //Carrier detect
-			nRFCMD_CE (0);cd
+			nRFCMD_CE (0);
 
 			if ((nRFAPI_CarrierDetect () != 0x01))
 			{
 				GPIOSetValue (1, 1, 1);
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
-				//SortQueue(Q);
 				msgp = Front(Q);
+				RotQueue(Q);
+
 				dtnMsg.proto = RFBPROTO_ND_REQ;
 				dtnMsg.NDreq.from = htons (tag_id);
 				dtnMsg.NDreq.time= htonl (LPC_TMR32B0->TC);
@@ -801,18 +805,17 @@ main (void)
 					//for test
 					dtnMsg.msg.prop = N;
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
-
-
 					nRFAPI_SetRxMode(0);
 					nRF_tx (1);
+
+
 
 
 
 					//modify Msg properity
 					//msgp->prop = msgp->prop -1;
 					//if(msgp->prop == 0)
-					Dequeue(Q);
-					Enqueue(dtnMsg.msg,Q);
+					//Dequeue(Q);
 					GPIOSetValue (1, 2, 0);
 				}
 			}

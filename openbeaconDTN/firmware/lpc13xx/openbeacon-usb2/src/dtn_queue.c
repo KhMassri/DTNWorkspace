@@ -84,6 +84,7 @@ DTNMsg FrontAndDequeue(QueueRecord* Q) {
 /*
  * Msg with least prob will be at Rear
  * */
+
 void SortQueue(QueueRecord* Q){
 	if(IsEmpty(Q))
 		return;
@@ -91,25 +92,43 @@ void SortQueue(QueueRecord* Q){
 	uint8_t i,j;
 
 	for(i=Q->Front;i!=Q->Rear;i=Succ(i))
-		for(j=Succ(i); j!=Succ(Q->Rear) ;j=Succ(j))
-		{
+	{
+		j=Succ(i);
+		while(1){
 			if((Q->Array[j]).prop > (Q->Array[i]).prop)
-			{temp = Q->Array[i];
-			Q->Array[i]=Q->Array[j];
-			Q->Array[j]=temp;
+			{
+				temp = Q->Array[i];
+				Q->Array[i]=Q->Array[j];
+				Q->Array[j]=temp;
 			}
-
+			if(j==Q->Rear)
+				break;
+			j=Succ(j);
 		}
+	}
+}
+
+void RotQueue(QueueRecord* Q){
+	if(IsEmpty(Q))
+			return;
+	DTNMsg temp = FrontAndDequeue(Q);
+	Enqueue(temp,Q);
 
 }
+
 
 uint8_t Contains(QueueRecord* Q, uint32_t Id){
 	if(IsEmpty(Q))
 		return 0;
-	uint8_t i;
-	for(i=Q->Front;i!=Q->Rear;i=Succ(i))
-			if((Q->Array[i]).seq == Id)
+	uint8_t i = Q->Front;
+	do{
+		if((Q->Array[i]).seq == Id)
 			return 1;
+		if(i == Q->Rear)
+			break;
+		i=Succ(i);
+	}while(i!=Q->Front);
+
 	return 0;
 
 
