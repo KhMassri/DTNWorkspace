@@ -10,7 +10,7 @@ DTN Implementation
 #ifndef __DTN_QUEUE_H__
 #define __DTN_QUEUE_H__
 
-#define CAPACITY 20
+#define CAPACITY 50
 
 #include <openbeacon.h>
 #include "openbeacon-proto.h"

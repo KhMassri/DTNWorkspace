@@ -599,10 +599,9 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		//if(LPC_TMR32B0->TC - time >= 10)
-		if(onemsg<2)
+		if(LPC_TMR32B0->TC - time >= 10)
+			//if(onemsg<1)
 		{
-
 			msg.from = htons (tag_id);
 			msg.proto = RFBPROTO_DTN_MSG;
 			msg.prop = 1;
@@ -611,6 +610,19 @@ main (void)
 			Enqueue(msg, Q);
 			time = LPC_TMR32B0->TC;
 			onemsg++;
+
+			g_Log.time1 = ntohl(msg.time);
+			g_Log.time2 = ntohl(msg.time);
+			g_Log.seq = ntohl(msg.seq);
+			g_Log.from = ntohs (msg.from);
+			g_Log.prop = msg.prop;
+			g_Log.crc = crc8 (((uint8_t *) & g_Log),sizeof (g_Log) - sizeof (g_Log.crc));
+			// store data if space left on FLASH
+			if (g_storage_items < (LOGFILE_STORAGE_SIZE/sizeof (g_Log)))
+			{	storage_write (g_storage_items * sizeof (g_Log), sizeof (g_Log), &g_Log);
+			// increment and store RAM persistent storage position
+			g_storage_items ++;
+			}
 		}
 
 		/* Contention phase*/
@@ -618,7 +630,7 @@ main (void)
 		pmu_sleep_ms (2);
 		nRFAPI_SetRxMode (1);
 		nRFCMD_CE (1);
-		pmu_sleep_ms (800+rnd(800));
+		pmu_sleep_ms (100+rnd(1000));
 		nRFCMD_CE (0);
 
 
@@ -638,20 +650,20 @@ main (void)
 					GPIOSetValue (1, 1, 1);
 					do
 					{
-						r = 10+rnd(20);//was 20
-						pmu_sleep_ms (r);
-						s = s+r;
+						//r = 10+rnd(20);//was 20
+						r=rnd(10);
+						pmu_sleep_ms (r*2);
+						s = s+r*2;
 						nRFAPI_SetRxMode(1);
 						nRFCMD_CE (1);
 						pmu_sleep_ms (2); //Carrier detect
 						nRFCMD_CE (0);
-						if((nRFAPI_CarrierDetect () != 0x01) && rnd(10)<=3){
+						if((nRFAPI_CarrierDetect () != 0x01 && rnd(10)<=4)){  /**/
 							done = 1;
 							break;
 						}
-						s=s+10;
-						//j=j+40;
-					}while(s<500-40); //was 40
+						s=s+2;
+					}while(s<300-20); //was 40
 
 					if (done)
 					{
@@ -664,7 +676,8 @@ main (void)
 						nRFAPI_SetRxMode(0);
 						//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
 						nRF_tx (1);
-						pmu_sleep_ms (500-s);
+						/* sleep for the rest of contention window*/
+						pmu_sleep_ms (300-s);
 						GPIOSetValue (1, 1, 0);
 
 						// switch to my_mac for unicast receiving......
@@ -693,11 +706,12 @@ main (void)
 
 								if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_DTN_MSG)
 								{
-									if(Contains(Q,dtnMsg.msg.seq)==0)
+									if(!Contains(Q,dtnMsg.msg.seq))
 									{
 
 										Enqueue(dtnMsg.msg,Q);
-										g_Log.time = ntohl(dtnMsg.msg.time);
+										g_Log.time1 = ntohl(dtnMsg.msg.time);
+										g_Log.time2 = LPC_TMR32B0->TC;
 										g_Log.seq = ntohl(dtnMsg.msg.seq);
 										g_Log.from = ntohs (dtnMsg.msg.from);
 										g_Log.prop = dtnMsg.msg.prop;
@@ -719,10 +733,9 @@ main (void)
 					GPIOSetValue (1, 1, 0);
 				}
 
-				else
-				pmu_sleep_ms (500);
+				else /*already has the msg so sleep and don't disrupt other nodes*/
+					pmu_sleep_ms (500);
 			}
-
 			nRFCMD_CE (0);
 			nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
 			nRFAPI_FlushRX ();
@@ -791,7 +804,7 @@ main (void)
 					}
 
 				}
-				while(++w<=50);
+				while(++w<=30);
 				GPIOSetValue (1, 1, 0);
 
 				if(N)
@@ -803,14 +816,10 @@ main (void)
 					bzero (&dtnMsg, sizeof (dtnMsg));
 					dtnMsg.msg = *msgp;
 					//for test
-					dtnMsg.msg.prop = N;
+					dtnMsg.msg.prop = 1;//N;
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 					nRFAPI_SetRxMode(0);
 					nRF_tx (1);
-
-
-
-
 
 					//modify Msg properity
 					//msgp->prop = msgp->prop -1;

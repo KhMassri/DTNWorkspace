@@ -189,7 +189,7 @@ typedef union
 
 typedef struct
 {
-	uint32_t time;
+	uint32_t time1,time2;
 	uint32_t seq;
 	uint16_t from;
 	uint8_t prop;
