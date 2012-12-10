@@ -560,7 +560,7 @@ main (void)
 	blink (2);
 
 	/* Initialize OpenBeacon nRF24L01 interface */
-	if (!nRFAPI_Init(CONFIG_TRACKER_CHANNEL, broadcast_mac, sizeof (broadcast_mac), 0))
+	if (!nRFAPI_Init(CONFIG_BROADCAST_CHANNEL, broadcast_mac, sizeof (broadcast_mac), 0))
 		for (;;)
 		{
 			GPIOSetValue (1, 2, 1);
@@ -599,7 +599,7 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		if(LPC_TMR32B0->TC - time >= 10)
+		if(LPC_TMR32B0->TC - time >= 10 && onemsg<15)
 			//if(onemsg<1)
 		{
 			msg.from = htons (tag_id);
@@ -818,8 +818,31 @@ main (void)
 					//for test
 					dtnMsg.msg.prop = 1;//N;
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
-					nRFAPI_SetRxMode(0);
-					nRF_tx (1);
+
+
+					uint8_t isSink = 0;
+					for(t=0;t<N;t++)
+						if(crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xEA18)
+						{
+							isSink = 1;
+							break;
+						}
+
+					if(isSink)
+					{
+						nRFAPI_SetTxMAC (Nei[t],sizeof(my_mac));
+						nRFAPI_SetChannel(CONFIG_UNICAST_CHANNEL);
+						nRFAPI_SetRxMode(0);
+						nRF_tx (1);
+						Dequeue(Q);
+						nRFAPI_SetTxMAC (broadcast_mac,sizeof(my_mac));
+						nRFAPI_SetChannel(CONFIG_BROADCAST_CHANNEL);
+					}
+					else
+					{
+						nRFAPI_SetRxMode(0);
+						nRF_tx (1);
+					}
 
 					//modify Msg properity
 					//msgp->prop = msgp->prop -1;

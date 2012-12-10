@@ -34,10 +34,11 @@ uint8_t Succ(uint8_t Value) {
 	return Value;
 }
 
+/*If the queue is full then evict the front (the first was enqueued) */
 void Enqueue(DTNMsg X, QueueRecord* Q) {
 
 	if (IsFull(Q)) {
-		return;
+		Dequeue(Q);
 	} else {
 		Q->Size++;
 		Q->Rear = Succ(Q->Rear);
