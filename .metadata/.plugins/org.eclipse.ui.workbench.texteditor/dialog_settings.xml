@@ -13,18 +13,19 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="msg" key="selection"/>
+		<item value="sinked" key="selection"/>
 		<list key="findhistory">
+			<item value="delivered"/>
+			<item value="print"/>
+			<item value="nRFCMD_Power"/>
+			<item value="#include &quot;nRF_API.h&quot;"/>
+			<item value="MsgSeq"/>
+			<item value="onemsg"/>
+			<item value="channel"/>
 			<item value="msg"/>
-			<item value="UID"/>
-			<item value="TDeviceUID"/>
-			<item value="cts"/>
-			<item value="rts"/>
-			<item value="pressedCounter"/>
-			<item value="rnd"/>
-			<item value="g_sequence"/>
 		</list>
 		<list key="replacehistory">
+			<item value="sinked"/>
 			<item value="ND_RES"/>
 			<item value="NDres"/>
 			<item value="NDRes"/>

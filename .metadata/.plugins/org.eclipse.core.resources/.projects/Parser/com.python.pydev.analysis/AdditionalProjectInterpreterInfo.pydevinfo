@@ -1,0 +1,41 @@
+-- VERSION_3
+-- START DISKCACHE
+/home/massri/ONESimulator/.metadata/.plugins/org.eclipse.core.resources/.projects/Parser/com.python.pydev.analysis/v1_indexcache
+.v1_indexcache
+test|0|/home/massri/ONESimulator/Parser/src/test.py
+parse|0|/home/massri/ONESimulator/Parser/src/parse.py
+-- END DISKCACHE
+-- START DICTIONARY
+4
+3=it
+2=test
+4=it.__init__
+1=parse
+-- END DICTIONARY
+-- START TREE 1
+18
+avg|1|avghpcnt!11@
+del|1|delay!11@
+emp|1|emptags!11@
+hcn|1|hcnts!11@
+ind|1|index!11@
+it|1|it!17@
+li|1|li!11@
+log|1|logfile!11@
+lst|1|lst!11@
+out|1|out!11@
+per|1|perNodeSinked!11@
+re|1|re!11@
+rem|1|remsgs!11@
+s|2|s!19@s!11@
+shp|1|shpcnt!11@
+sin|2|sinks!11@sinked!11@
+som|1|some_func!18@
+tag|2|TAGS!11@tags!11@
+-- END TREE
+-- START TREE 2
+3
+__i|2|__iter__!3&18@__init__!3&18@
+cou|1|count!4&19@
+nex|1|next!3&18@
+-- END TREE

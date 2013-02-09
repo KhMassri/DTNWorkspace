@@ -1,0 +1,23 @@
+Message stats for scenario FadToFadSinkBS1000Coding0
+sim_time: 341042.0000
+created: 30001
+started: 39592
+relayed: 39431
+aborted: 161
+dropped: 28104
+removed: 31896
+delivered: 9329
+delivery_prob: 0.3110
+response_prob: 0.0000
+overhead_ratio: 3.2267
+latency_avg: 2545.2546
+latency_med: 319.0000
+hopcount_avg: 2.2952
+hopcount_med: 2
+copies_avg: 1.4051531615612813
+total_copies_avg: 1.4051531615612813
+buffertime_avg: 1506.1633
+buffertime_med: 270.0000
+custodiantime_avg: 3021.9970
+rtt_avg: NaN
+rtt_med: NaN

@@ -38,7 +38,7 @@
 static uint16_t tag_id;
 static const uint16_t sink = 0x1fbf;
 
-static TDeviceUID device_uuid;
+static TDeviceUID device_uuid; //it an array of 4 32bit elemnts
 /* random seed */
 static uint32_t random_seed;
 /* logfile position */
@@ -569,6 +569,10 @@ main (void)
 			pmu_sleep_ms (500);
 		}
 
+	nRFAPI_SetTxPower (1);
+	nRFCMD_Power (1);
+
+
 	//nRFAPI_TxRetries (0);
 	/* enable ACK */
 	//nRFAPI_SetPipeSizeRX (0, NRF_MAX_MAC_SIZE);
@@ -599,7 +603,7 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		if(LPC_TMR32B0->TC - time >= 10 && onemsg<15)
+		if(LPC_TMR32B0->TC - time >= 1 && onemsg<=100)
 			//if(onemsg<1)
 		{
 			msg.from = htons (tag_id);
@@ -630,7 +634,7 @@ main (void)
 		pmu_sleep_ms (2);
 		nRFAPI_SetRxMode (1);
 		nRFCMD_CE (1);
-		pmu_sleep_ms (100+rnd(1000));
+		pmu_sleep_ms (1+rnd(1));
 		nRFCMD_CE (0);
 
 
@@ -656,7 +660,7 @@ main (void)
 						s = s+r*2;
 						nRFAPI_SetRxMode(1);
 						nRFCMD_CE (1);
-						pmu_sleep_ms (2); //Carrier detect
+						pmu_sleep_ms (2); //Carrier detect it will wakeup if there is an interupt
 						nRFCMD_CE (0);
 						if((nRFAPI_CarrierDetect () != 0x01 && rnd(10)<=4)){  /**/
 							done = 1;
@@ -708,6 +712,7 @@ main (void)
 								{
 									if(!Contains(Q,dtnMsg.msg.seq))
 									{
+										dtnMsg.msg.prop = dtnMsg.msg.prop +1;
 
 										Enqueue(dtnMsg.msg,Q);
 										g_Log.time1 = ntohl(dtnMsg.msg.time);
@@ -754,7 +759,6 @@ main (void)
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
 				msgp = Front(Q);
-				RotQueue(Q);
 
 				dtnMsg.proto = RFBPROTO_ND_REQ;
 				dtnMsg.NDreq.from = htons (tag_id);
@@ -816,13 +820,13 @@ main (void)
 					bzero (&dtnMsg, sizeof (dtnMsg));
 					dtnMsg.msg = *msgp;
 					//for test
-					dtnMsg.msg.prop = 1;//N;
+					//dtnMsg.msg.prop = 1;//N;
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
 
 					uint8_t isSink = 0;
 					for(t=0;t<N;t++)
-						if(crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xEA18)
+						if(crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xEA18 || crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xCDF6)
 						{
 							isSink = 1;
 							break;
@@ -842,6 +846,8 @@ main (void)
 					{
 						nRFAPI_SetRxMode(0);
 						nRF_tx (1);
+						RotQueue(Q);
+
 					}
 
 					//modify Msg properity

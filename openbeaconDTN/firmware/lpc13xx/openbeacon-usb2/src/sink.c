@@ -570,6 +570,8 @@ main (void)
 			pmu_sleep_ms (500);
 		}
 
+
+
 	//nRFAPI_TxRetries (0);
 	/* enable ACK */
 	//nRFAPI_SetPipeSizeRX (0, NRF_MAX_MAC_SIZE);
@@ -586,8 +588,7 @@ main (void)
 	/* disable unused jobs */
 	SSPdiv = LPC_SYSCON->SSPCLKDIV;
 	uint32_t time;
-	//DTNMsg msg;
-	//DTNMsg* msgp;
+
 
 	time = LPC_TMR32B0->TC;
 
@@ -599,32 +600,6 @@ main (void)
 	{
 		checkSleepForever();
 
-		// DTNMsg generation
-		/*if(LPC_TMR32B0->TC - time >= 10)
-			//if(onemsg<1)
-		{
-			msg.from = htons (tag_id);
-			msg.proto = RFBPROTO_DTN_MSG;
-			msg.prop = 1;
-			msg.time= htonl (LPC_TMR32B0->TC);
-			msg.seq = htonl(((0x00000000 | tag_id)<<16) | ++MsgSeq); //Msg Id is tagId:MsgSeq
-			Enqueue(msg, Q);
-			time = LPC_TMR32B0->TC;
-			onemsg++;
-
-			g_Log.time1 = ntohl(msg.time);
-			g_Log.time2 = ntohl(msg.time);
-			g_Log.seq = ntohl(msg.seq);
-			g_Log.from = ntohs (msg.from);
-			g_Log.prop = msg.prop;
-			g_Log.crc = crc8 (((uint8_t *) & g_Log),sizeof (g_Log) - sizeof (g_Log.crc));
-			// store data if space left on FLASH
-			if (g_storage_items < (LOGFILE_STORAGE_SIZE/sizeof (g_Log)))
-			{	storage_write (g_storage_items * sizeof (g_Log), sizeof (g_Log), &g_Log);
-			// increment and store RAM persistent storage position
-			g_storage_items ++;
-			}
-		}*/
 
 		/* Contention phase*/
 
@@ -643,8 +618,6 @@ main (void)
 			crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
 			if (ntohs(dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_REQ)
 			{
-				if(!Contains(Q,dtnMsg.NDreq.seq) )
-				{
 					// send NDRes during NDRes time Window 200
 					uint16_t s=0,r;
 					uint8_t done = 0;
@@ -710,7 +683,7 @@ main (void)
 								if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_DTN_MSG)
 								{
 									if(!Contains(Q,dtnMsg.msg.seq))
-									{
+									{ // USE ARRAY FOR IDS................
 
 										Enqueue(dtnMsg.msg,Q);
 										g_Log.time1 = ntohl(dtnMsg.msg.time);
@@ -734,104 +707,14 @@ main (void)
 						}
 					}
 					GPIOSetValue (1, 1, 0);
-				}
 
-				else /*already has the msg so sleep and don't disrupt other nodes*/
-					pmu_sleep_ms (500);
 			}
 			nRFCMD_CE (0);
 			nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
 			nRFAPI_FlushRX ();
 		}
 
-		/**********************************************************************/
-	/*	else if (!IsEmpty(Q)) {   // if the queue is not empty sending NDReq
 
-			nRFCMD_CE (1);
-			pmu_sleep_ms (2); //Carrier detect
-			nRFCMD_CE (0);
-
-			if ((nRFAPI_CarrierDetect () != 0x01))
-			{
-				GPIOSetValue (1, 1, 1);
-
-				bzero (&dtnMsg, sizeof (dtnMsg));
-				msgp = Front(Q);
-				RotQueue(Q);
-
-				dtnMsg.proto = RFBPROTO_ND_REQ;
-				dtnMsg.NDreq.from = htons (tag_id);
-				dtnMsg.NDreq.time= htonl (LPC_TMR32B0->TC);
-				dtnMsg.NDreq.seq = msgp->seq;
-				dtnMsg.NDreq.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.NDreq.crc)));
-				nRFAPI_SetRxMode(0);
-				//	nRFCMD_CmdExec (W_TX_PAYLOAD_NOACK);
-				nRF_tx (1);  // Sending NDReq
-
-				//collecting neighbors
-				uint8_t N = 0,added;
-				uint16_t w=0;
-				unsigned char Nei[10][5];
-				do{
-
-					nRFAPI_SetRxMode (1);
-					nRFCMD_CE (1);
-					pmu_sleep_ms (10); //incomming NDRes time window, must be long to accept first at least
-					nRFCMD_CE (0);
-
-					// if there is incomming packet recieve it
-					if (nRFCMD_IRQ ())
-					{
-						do
-						{
-							added = 0;
-							nRFCMD_RegReadBuf (RD_RX_PLOAD, dtnMsg.byte,sizeof (dtnMsg));
-							xxtea_decode (dtnMsg.block, XXTEA_BLOCK_COUNT, xxtea_key);
-							crc = crc16 (dtnMsg.byte,sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc));
-							if (ntohs (dtnMsg.msg.crc) == crc && dtnMsg.proto == RFBPROTO_ND_RES)
-							{
-								//update neighbor
-								for(t=0;t<N;t++)
-									if(Nei[t][0] == dtnMsg.NDres.from[0] && Nei[t][1] == dtnMsg.NDres.from[1] && Nei[t][2] == dtnMsg.NDres.from[2] && Nei[t][3] == dtnMsg.NDres.from[3] && Nei[t][4] == dtnMsg.NDres.from[4])
-										added = 1;
-								if(!added)
-								{
-									for(t=0;t<5;t++)
-										Nei[N][t] = dtnMsg.NDres.from[t];
-									N++;
-								}
-							}
-							status = nRFAPI_GetFifoStatus ();
-						}while ((status & FIFO_RX_EMPTY) == 0);
-						nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
-					}
-
-				}
-				while(++w<=30);
-				GPIOSetValue (1, 1, 0);
-
-				if(N)
-				{
-					GPIOSetValue (1, 2, 1);
-
-					pmu_sleep_ms (100);
-					//sending DTNMsg
-					bzero (&dtnMsg, sizeof (dtnMsg));
-					dtnMsg.msg = *msgp;
-					//for test
-					dtnMsg.msg.prop = 1;//N;
-					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
-					nRFAPI_SetRxMode(0);
-					nRF_tx (1);
-
-					//modify Msg properity
-					//msgp->prop = msgp->prop -1;
-					//if(msgp->prop == 0)
-					//Dequeue(Q);
-					GPIOSetValue (1, 2, 0);
-				}
-			}
-		}*/
 
 		nRFAPI_ClearIRQ (MASK_IRQ_FLAGS);
 		nRFAPI_FlushTX ();

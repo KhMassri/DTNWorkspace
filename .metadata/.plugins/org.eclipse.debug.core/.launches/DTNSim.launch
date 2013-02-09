@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="core.DTNSim"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="setting/FadwithNC/FadwithNC.txt"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-b 1 setting/FadwithNC/FadwithNC.txt"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="one"/>
 </launchConfiguration>

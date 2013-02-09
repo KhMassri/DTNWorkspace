@@ -147,6 +147,7 @@ public class FadToFadSink extends DTNRouter {
 		Connection con=null;
 
 		for(Message m:messages){
+			
 
 			for(DTNHost h:neighb){
 				if((this.getDelProb()>=threshold *(((FadToFadSink)h.getRouter()).getDelProb())))
@@ -155,16 +156,29 @@ public class FadToFadSink extends DTNRouter {
 				con=getConOf(h);
 				if(con==null||h.getRouter().hasMessage(m.getId())) //FIXME hasMessage or has its code.
 					continue;
+				
+				String[] ids = m.getId().split("&");
+				if(ids.length>1)
+					if(h.getRouter().hasMessage(ids[0])||h.getRouter().hasMessage(ids[1])||h.getRouter().hasMessage(ids[1]+"&"+ids[0])) //FIXME hasMessage or has its code.
+						continue;
 
 				curFt=(Double)m.getProperty(ftStr);
 				newFt=1-(1-curFt)*(1-delProb);
 				Message msg=m.replicate();
 				msg.updateProperty(ftStr, newFt);
+				msg.setAsBackUp();
 
 				if(startTransfer(msg, con)!=RCV_OK)
 					continue;
+				
 
-				m.updateProperty(ftStr, 1-(1-curFt)*(1-((FadToFadSink)h.getRouter()).getDelProb()));
+				if(m.isMaster()){
+					m.setAsBackUp();
+					m.updateProperty(ftStr, 1-(1-curFt)*(1-((FadToFadSink)h.getRouter()).getDelProb()));
+				}
+				else
+					this.deleteMessage(m.getId(), false);
+				
 				delProb=(1-alpha)*delProb + alpha*((FadToFadSink)h.getRouter()).getDelProb();
 				this.lastUpdate = SimClock.getTime();
 				return con;
@@ -204,7 +218,7 @@ public class FadToFadSink extends DTNRouter {
 		if(oldest==null)
 			return super.checkReceiving(m);
 
-		if((Double)oldest.getProperty(ftStr)<(Double)m.getProperty(ftStr))
+		if((Double)oldest.getProperty(ftStr)<=(Double)m.getProperty(ftStr))
 			//if(oldest.getHopCount()<m.getHopCount())
 			return MessageRouter.DENIED_NO_SPACE;
 
@@ -349,7 +363,7 @@ public class FadToFadSink extends DTNRouter {
 				if(current.getId().contains("&"))
 					continue;
 				//if(current.getHopCount()>1)
-				if((Double)current.getProperty(ftStr) >= 0.5)
+				if((Double)current.getProperty(ftStr) > 0.1 && !current.isMaster())
 					if(oldest == null)
 						oldest =current;
 					else

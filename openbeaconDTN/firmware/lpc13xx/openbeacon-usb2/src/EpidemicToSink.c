@@ -569,6 +569,10 @@ main (void)
 			pmu_sleep_ms (500);
 		}
 
+	nRFAPI_SetTxPower (1);
+	nRFCMD_Power (1);
+
+
 	//nRFAPI_TxRetries (0);
 	/* enable ACK */
 	//nRFAPI_SetPipeSizeRX (0, NRF_MAX_MAC_SIZE);
@@ -599,7 +603,7 @@ main (void)
 		checkSleepForever();
 
 		// DTNMsg generation
-		if(LPC_TMR32B0->TC - time >= 10)
+		if(LPC_TMR32B0->TC - time >= 30)
 			//if(onemsg<1)
 		{
 			msg.from = htons (tag_id);
@@ -630,7 +634,7 @@ main (void)
 		pmu_sleep_ms (2);
 		nRFAPI_SetRxMode (1);
 		nRFCMD_CE (1);
-		pmu_sleep_ms (100+rnd(1000));
+		pmu_sleep_ms (200+rnd(2000));
 		nRFCMD_CE (0);
 
 
@@ -648,12 +652,15 @@ main (void)
 					uint16_t s=0,r;
 					uint8_t done = 0;
 					GPIOSetValue (1, 1, 1);
+					r=rnd(10);
+					pmu_sleep_ms (r*2);
 					do
 					{
-						//r = 10+rnd(20);//was 20
-						r=rnd(10);
-						pmu_sleep_ms (r*2);
-						s = s+r*2;
+
+						//r=rnd(10);
+						pmu_sleep_ms (10);
+						//s = s+r*2;
+						s = s+10;
 						nRFAPI_SetRxMode(1);
 						nRFCMD_CE (1);
 						pmu_sleep_ms (2); //Carrier detect
@@ -708,6 +715,7 @@ main (void)
 								{
 									if(!Contains(Q,dtnMsg.msg.seq))
 									{
+										dtnMsg.msg.prop = dtnMsg.msg.prop +1;
 
 										Enqueue(dtnMsg.msg,Q);
 										g_Log.time1 = ntohl(dtnMsg.msg.time);
@@ -754,7 +762,6 @@ main (void)
 
 				bzero (&dtnMsg, sizeof (dtnMsg));
 				msgp = Front(Q);
-				RotQueue(Q);
 
 				dtnMsg.proto = RFBPROTO_ND_REQ;
 				dtnMsg.NDreq.from = htons (tag_id);
@@ -816,16 +823,15 @@ main (void)
 					bzero (&dtnMsg, sizeof (dtnMsg));
 					dtnMsg.msg = *msgp;
 					//for test
-					dtnMsg.msg.prop = 1;//N;
+					//dtnMsg.msg.prop = 1;//N;
 					dtnMsg.msg.crc = htons (crc16(dtnMsg.byte, sizeof (dtnMsg) - sizeof (dtnMsg.msg.crc)));
 
 
 					uint8_t isSink = 0;
 					for(t=0;t<N;t++)
-						if(crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xEA18)
+						if(crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xEA18 || crc16 ((uint8_t *) & Nei[t], sizeof (Nei[t])) == 0xCDF6)
 						{
 							isSink = 1;
-							blink(3);
 							break;
 						}
 
@@ -843,6 +849,8 @@ main (void)
 					{
 						nRFAPI_SetRxMode(0);
 						nRF_tx (1);
+						RotQueue(Q);
+
 					}
 
 					//modify Msg properity
