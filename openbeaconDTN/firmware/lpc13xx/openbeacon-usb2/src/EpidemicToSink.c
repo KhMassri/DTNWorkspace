@@ -653,25 +653,31 @@ main (void)
 					uint8_t done = 0;
 					GPIOSetValue (1, 1, 1);
 					r=rnd(10);
-					pmu_sleep_ms (r*2);
-					do
+					pmu_sleep_ms (r*10);
+					s = s+r*10;
+					while(s<300)
 					{
-
-						//r=rnd(10);
-						pmu_sleep_ms (10);
-						//s = s+r*2;
-						s = s+10;
 						nRFAPI_SetRxMode(1);
 						nRFCMD_CE (1);
 						pmu_sleep_ms (2); //Carrier detect
 						nRFCMD_CE (0);
-						if((nRFAPI_CarrierDetect () != 0x01 && rnd(10)<=4)){  /**/
+						if((nRFAPI_CarrierDetect ()))
+						{
+							pmu_sleep_ms (10);
+							s=s+10;
+							continue;
+						}
+						else if (rnd(100)<=20){
 							done = 1;
 							break;
 						}
-						s=s+2;
-					}while(s<300-20); //was 40
+						else
+						{
+							pmu_sleep_ms (8);
+							s=s+10;
+						}
 
+					}
 					if (done)
 					{
 						bzero (&dtnMsg, sizeof (dtnMsg));
